@@ -1,0 +1,445 @@
+\documentclass[10pt,landscape, a4paper]{article}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage{hyperref}
+\usepackage[english]{babel}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{enumitem, kantlipsum}
+\usepackage[nopar]{lipsum}
+\usepackage{setspace}
+\usepackage{dsfont}
+\usepackage{bm}
+
+\geometry{top=0.4cm,left=0.4cm,right=0.4cm,bottom=0.4cm}
+
+% Turn off header and footer
+\pagestyle{empty}
+ 
+
+% Redefine section commands to use less space
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-0.5ex plus -.2ex minus -.2ex}%
+                                {0.2ex plus .2ex}%x
+                                {\normalfont\normalsize\bfseries}}
+
+\renewcommand{\subsection}{\@startsection{subsection}{1}{0mm}%
+                                {-0.5ex plus -.2ex minus -.2ex}%
+                                {0.2ex plus .2ex}%x
+                                {\small\small\bfseries}}
+                                
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+\theoremstyle{remark}
+\newtheorem*{thm}{Theorem}
+\newtheorem*{defn}{Definition}
+\newtheorem*{lemma}{Lemma}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{question}{Question}
+\newenvironment{soln}{\begin{proof}[Solution]}{\end{proof}}
+\newtheorem*{Ex}{Ex}
+
+\newcommand{\var}{\operatorname{var}}
+\newcommand{\E}{\operatorname{\mathbb{E}}}
+\newcommand{\abs}[1]{\left\lvert #1 \right\rvert}
+\newcommand{\cov}[1]{\operatorname{cov}(#1)}
+\newcommand{\SE}{\mathrm{SE}}
+\newcommand{\prob}{\mathbb{P}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\VAR}{\mathrm{VaR}}
+\newcommand{\ES}{\mathrm{ES}}
+
+\begin{document}
+
+\setlength{\abovedisplayskip}{0pt}%
+\setlength{\belowdisplayskip}{0pt}%
+\setlength{\abovedisplayshortskip}{-2pt}%
+\setlength{\belowdisplayshortskip}{-2pt}%
+\setlength{\jot}{0pt}% Inter-equation spacing
+
+\raggedright
+
+
+\scriptsize
+\begin{multicols*}{3}
+% \textbf{Gaussian} pdf: $f(x) = \exp{(\frac{(x-\mu)^2}{2\sigma^2})}/(\sigma \sqrt{2\pi})$\\
+\textbf{Skewness} $S = \E [\frac{(X - \mu)^3}{\sigma^3}]$ \textbf{Kurtosis} $K = \E [\frac{(X - \mu)^4}{\sigma^4}]$ Excess Kurtosis: $K-3$\\
+\textbf{Tower rule} (law of total expectation) $X, Y$ are r.v., $\E[X] = \E [\E [X \lvert Y ]]$\\
+$\hat{\theta}$ is $\theta$'s estimator, unbias: $\E[\hat{\theta} \lvert \theta] = \theta$, consistency: $\hat{\theta} \to \theta$\\
+\textbf{Ljung-box test} $H_0: r_t$ has zero ACFs within lag $m$. $$Q(m) = T(T+2) \sum^m_{l=1} \frac{\hat{\rho}^2_l}{T-l} \sim \chi^2_m, \quad \text{reject if $Q(m) > \chi^2_m (1-\alpha)$}$$
+\textbf{AIC} $n\log (\hat{\sigma}^2_\epsilon) + 2(1+K)$   \textbf{BIC} $n\log (\hat{\sigma}^2_\epsilon) + \log n(1+K)$\\
+
+% \textbf{Hypothesis test} For $Y_i = \alpha + \beta X_i + \epsilon_i$, when variance is known,
+% \begin{align*}
+%     \hat{\beta} = \frac{\sum^n_{i=1}(X_i - \hat{\mu})(\beta(X_i - \hat{\mu}) + (\epsilon_i - \hat{\mu}_\epsilon))}{\sum^n_{i=1} (X_i - \hat{\mu})^2}\\
+%     \hat{\beta} - \beta = \frac{\sum^n_{i=1} (X_i - \hat{\mu})(\epsilon_i-\hat{\mu}_\epsilon)}{\sum^n_{i=1} (X_i - \hat{\mu})^2} \approx \frac{\sum^n_{i=1} (X_i - \hat{\mu})\epsilon_i}{\sum^n_{i=1} (X_i - \hat{\mu})^2} \sim \mathcal{N} (0, \frac{\sigma^2_{\epsilon}}{\sum^n_{i=1} (X_i - \hat{\mu})^2 })
+% \end{align*}
+\textbf{SE} $\hat{\theta} - \theta \sim \mathcal{N} (0, \SE^2_{\theta})$, $\prob (\theta \in [\hat{\theta} - \SE_{\theta z_{\alpha /2}}, \hat{\theta} + \SE_{\theta z_{\alpha /2}}]) = 1-\alpha$
+\begin{align*}
+    \SE_\beta = \sqrt{\frac{\sigma^2_\epsilon}{\sum^n_{i=1} (X_i -\hat{\mu})^2}} \qquad 
+    \SE_\alpha = \sqrt{\frac{\sigma^2_{\epsilon} \sum X_i^2}{\sum^n_{i=1} (X_i - \hat{\mu})^2}}
+\end{align*}
+Variance is unknown, use t-test, $\sigma^2_\epsilon = \frac{1}{n-K-1}\sum^n_{i=1} \hat{\epsilon}^2_i\sim \frac{\chi^2_{n-2} \sigma^2_{\epsilon}}{n-2} $
+\begin{align*}
+    \hat{\SE}_\beta = \frac{\hat{\sigma}_\epsilon}{\sqrt{\sum^n_{i=1} (X_i - \hat{\mu})^2}} \quad t_\beta = \frac{\hat{\beta} - 0}{\hat{\SE}_\beta} \sim T_{n-2}
+\end{align*}
+Mul $\mathbf{Y} = \mathbf{X}\beta + \epsilon, e = [\mathbf{X}^T \mathbf{X}]^{-1} \mathbf{X}^T \epsilon, \E [e] = \Vec{0}, \cov{e} = \E [ee^T] = \sigma^2_\epsilon [\mathbf{X}^T \mathbf{X}]^{-1}$ 
+\begin{align*}
+    \hat{\SE}_{\beta_i} = \sigma_\epsilon \sqrt{\left[[\mathbf{X}^T \mathbf{X}]^{-1} \right]_{i, i}}, t_{\beta_i} = \frac{\hat{\beta}_i}{\hat{\SE}_{\beta_i}}, \abs{t_{\beta_i}} < T_{n-K-1} (1 - \frac{\alpha}{2}) \Rightarrow \text{ac null}
+\end{align*}
+\textbf{OLS} $\hat{\epsilon}_i = Y_i - \hat{\alpha} - \hat{\beta}X_i, \mathrm{RSS} = R(\hat{\alpha}, \hat{\beta}) = \sum^n_{i=1} \hat{\epsilon}^2_i$\\
+Multi: $\sum^n_{i=1} (Y_i - \alpha - \sum^K_{k=1} \beta_k X_{k, i})^2 = \langle \mathbf{Y-X}\beta, \mathbf{Y-X}\beta \rangle = \lvert \mathbf{Y-X}\beta \rVert^2$
+Gradient: $\nabla_\beta (\mathbf{Y-X}\beta)^T (\mathbf{Y-X}\beta) = 2(\mathbf{X}\beta - \mathbf{Y})^T \mathbf{X}, \hat{\beta} = [\mathbf{X}^T \mathbf{X}]^{-1} [\mathbf{X}^T \mathbf{Y}]$
+\textbf{Stationarity} same distribution for any $k,l$. Statistics are time invariant.
+\textbf{ACVF} $\gamma_l := \cov{r_t, r_{t+l}} = \cov{r_{t+k}, r_{t+k+l}}$ cov of same series of lag $l$\\
+\textbf{ACF} how does future $r_{t+l}$ depends on today $r_t$, assume weak stationarity, $\rho_l = \frac{\cov{r_t, r_{t+l}}}{\sqrt{\var(r_t)\var(r_{t+l})}} = \frac{\gamma_l}{\sqrt{\gamma_0 \gamma_0}} = \gamma_l / \gamma_0$, independent of $t$\\
+ACF of random walk: $H_0$: $r_t$ has zero ACF. $\hat{\rho}_l \sim \mathcal{N} (0, 1/T)$ for large $T$, $\hat{\rho}_l \in [-2/\sqrt{T}, 2/\sqrt{T}]$ with prob $95\%$. $\abs{\rho}_l$ is large then not likely i.i.d.
+%-------------------------------------------------------------------------------
+\newline
+\textbf{AR(K) model}: $r_t = \phi_0 + \sum^K_{k=1} \phi_k r_{t-j} + a_t$, \\
+Char func: $\phi (x) = 1 - \sum^K_{k=1} \phi_k x^k$, let $\lambda_i$ be roots, then $\phi (x) = (1- \frac{1}{\lambda_1}x)\cdots (1- \frac{1}{\lambda_K}x)$, stationary iff $\abs{\lambda_i} > 1$.\\
+Mean: $\mu_r = \phi_0 + \sum^K_{k=1} \phi_k \mu_r + \E [a_t] \Rightarrow \mu_r = \frac{\phi_0}{1 - \sum^K_{k=1} \phi_k} = \frac{\phi_0}{\phi (1)}$, stationarity requires $\sum \phi_k < 1$\\
+\textbf{Yule-Walker equation}: 
+\vspace{-7pt}
+\begin{align*}
+    \gamma_l &= \cov{r_{t-l}, r_t} = \E [r^\prime_{t-l} r^\prime_t]=\E [\sum^K_{k=1} \phi_k r^\prime_{t-l} r^\prime_{t-k} + a_t r^\prime_{t-l}] \\[-5pt]
+    &= \sum^K_{k=1}\phi_k \gamma_{\abs{k-l}} + \E [a_t r^\prime_{t-l}], \quad \text{$\E [a_t r^\prime_{t-l}]=\sigma^2_a$ if $l=0$; $0$ otherwise}
+\end{align*}
+By $\rho_l = \gamma_l / \gamma_0$, $\rho_l = \sum^K_{k=1}\phi_k \rho_{\abs{k-l}}$. $K$ linear equations for $\gamma_i, \rho_i$,
+% $$
+% \begin{bmatrix}
+%     \gamma_1\\ \vdots\\ \gamma_K
+% \end{bmatrix}
+% =
+% \begin{bmatrix}
+%     \phi_1 \gamma_0 + \sum^K_{k=2} \phi_k \gamma_{k-1} \\ \vdots \\ \sum^K_{k=1} \phi_k \gamma_{K-k}
+% \end{bmatrix},
+% \begin{bmatrix}
+%     \rho_1\\ \vdots\\ \rho_K
+% \end{bmatrix}
+% =
+% \begin{bmatrix}
+%     \phi_1 \rho_0 + \sum^K_{k=2} \phi_k \rho_{k-1} \\ \vdots \\ \sum^K_{k=1} \phi_k \rho_{K-k}
+% \end{bmatrix}
+% $$
+\textbf{Tail-off ACF} For $l \geq K$, $\gamma_l = \sum_k \phi_k \gamma_{l=k}\Rightarrow \rho_l = \sum_k \phi_k \rho_{l=k}$. General solution is $\rho_l = \sum_k a_k \lambda^{-1}_k$, by stationarity, $\frac{1}{l} \log \abs{\rho_l} \to - \min_k \log \abs{\lambda_k}$\\
+Tail-off phenomenon: $\rho_l \to 0 \approx \max_k (\abs{\lambda_k})^{-l}$\\
+\textbf{Forecast} $\hat{r}_t (l) = \hat{r}^\prime_t (l) + \mu_r = \phi^l_1 (r_t -\mu_r) + \mu_r$,
+$e_{t+l} = \phi_1 e_{t+l-1} + a_{t+l} = \sum^{l-1}_{k=0} \phi^k_1 a_{t+l-k}$, $\sigma^2_t (l) = \sigma^2_a \sum_{j=0}^{l} \phi^{2j}_1$\\
+\textbf{Partial ACF} $\phi_{j, j}$, the $j^{\text{th}}$ partial ACF: correlation of $t_{t-j}$ with $r_t$ conditioned others. If AR(K) is the true model, $\hat{\phi}_{j,j}$ not be 0 for $j=K$, close to 0 for $j > k$; asymptotic SE of $\hat{\phi}_{j,j}$ is $1/\sqrt{T}$ for $j>K$. Cut-off phenomenon\\
+\textbf{Info} $\hat{a}_t = r_t - (\phi_0 + \sum^K_{j=1}\hat{\phi}_j r_{t-j}), \sigma^2_a = \frac{1}{T-2K-1} \sum^T_{t=K+1} \hat{a}^2_t$\\
+\textbf{Inference} Pick order using PACF and AIC, OLS for model param\\
+\textbf{Check} Ljung-Box for residual $\hat{a}_t$ with statistics $Q_m$ against $\chi^2_{m-g}$, $g$: \# nonzero coefficients (excluding $\phi_0$)\\
+\textbf{Cycle} Business cycle exists if characteristic function has imaginary roots, strength of each cycle depends on $\abs{\lambda^{-1}_i}$
+%---------------------------------------------------------------------------
+\newline
+\textbf{MA(K) model}: $r_t = c_0 + a_t +\sum^K_{j=1} \theta_j a_{t-j}$, all MA(K) models are stationary, MA($\infty$) weak stationary if $1 + \sum^{\infty}_{j=1} \theta^2_j < \infty$\\
+$\E [r_t] = c_0, \var (r_t) = (1+\sum^K_{j=1}\theta^2_j ) \sigma^2_a$\\
+Lag $l \leq K$, $\cov{r_t, r_{t+l}} = \sigma^2_a \sum^{K-l}_{j=0} \theta_j \theta_{j+l}, \theta_0 := 1, \rho_l = \frac{\cov{r_t, r_{t+l}}}{\var(r_t)}$. For $l>K$, $\rho_l = 0$ since no overlap (finite ACF cut-off).\\
+\textbf{MLE} $p(a_1, \dots, a_T \lvert \Vec{a}, \theta) = (2\pi \sigma^2_a)^{-T/2} \exp{(-\frac{\sum^T_{t=1} a^2_t}{2\sigma^2_a})}$. Conditional MLE: assume $\Vec{a} = \Vec{0}$, maximising along $\theta$\\
+\textbf{Forecast} memory has length at most $K$
+\vspace{-3pt}
+\begin{align*}
+l\leq K: &\hat{r}_t (l) = \E_t [r_{t+l}] = c_0 + \sum^K_{j=l} \theta_j a_{t+l-j}, \sigma^2_t (l) = (1+ \sum^{l-1}_{j=1} \theta^2_j )\sigma^2_a\\[-5pt]
+l>K: &\hat{r}_t (l)=c_0,\quad \sigma^2_t (l) = (1+\sum^K_{j=1} \theta^2_j )\sigma^2_a
+\end{align*}
+\textbf{Model conversion} Combine $\phi(B)r_t = b_0 +a_t$ (AR(k)),  $r_t = c_0 +\theta(B) a_t$ (MA(k)), we have $b_0 +a_t = \phi(B) (c_0 +\theta(B) a_t) \Rightarrow b_0 = \phi(1)c_0, \phi(x)\theta(x) = 1$\\
+AR(1) model: $r_t = b_0 + a_t + \phi_1 r_{t-1}, \phi(x) = (1 - \phi_1x)$, convert to MA:
+\begin{align*}
+    r_t &= \phi(B)^{-1} b_0 + \phi(B)^{-1} a_t = (1+\phi_1 B+\cdots)b_0 + (1+\phi_1 B +\phi_1^2 B^2+\cdots)a_t\\
+    &=(1+\phi_1 B+\cdots)b_0 + a_t + \phi_1 a_{t-1} + \phi^2_1 a_{t-2} + \cdots
+\end{align*}
+Finite MA implies finite nonzero ACF, thus AR(1) has inf tails off\\
+AR: finite PACF cut off, inf ACF tail off, explicit dependence on return\\
+MA: inf PACF tail off, finite ACG cut off, explicit dependence on  shock
+\\\textbf{ARMA model} $r_t - \sum^p_{j=1} \phi_j r_{t-j} = c_0 + a_t + \sum^q_{j=1} \theta_j a_{t-j}$\\
+Simp version: $\phi(B) r_t = c_0 + \theta(B) a_t$, $\phi(x), \theta(x)$ not have common factor:
+\begin{align*}
+    f(B) \phi(B)r_t = c_0 +f(B)\theta(B)a_t \Leftrightarrow \phi(B) r_t = f(B)^{-1} c_0 + \theta(B)a_t
+\end{align*}
+MA: $r_t = \phi(B)^{-1} c_0 + \phi(B)^{-1} \theta(B) a_t$, stationary if $\abs{\lambda}>1$, $\lambda$ is root of $\phi(x)$\\
+AR: $\theta(B)^{-1} \phi(B) r_t = \theta(B)^{-1} c_0 + a_t$, invertible if $\abs{\lambda}>1$, $\lambda$ is root of $\theta(x)$\\
+\textbf{Check} Ljung-Box for residuals, check with $\chi^2_{m-g}$, $g$: \# nonzero coefficients\\
+\textbf{ACVF} 1) find $\E [r_t a_{t-l}]$ for $l \leq K_\theta$ 2) couple the eqn with $\delta r_{t-l}$ to find $\gamma_l$\\
+\textbf{Inference} PACF, ACF inf tail off. Aim for small order and compute AIC.\\
+\textbf{Param} Conditional MLE let $a_{-k} = 0$, compute \ref{eql:arma_param} and min $\sum a^2_t$ w.r.t $\phi, \theta$
+\begin{equation}
+    a_{t+1} = r_{t+1} - \cdots - \phi_p r_{t+1-p} - c_0 + \theta_1 a_t + \cdots \theta_q a_{t+1-q}
+    \label{eql:arma_param}
+\end{equation}
+\textbf{Box-Jenkins criteria for ACF} 1) decay to zero: AR use PACF; 2) one or more spikes, rest are essentially zero: MA; 3) decay, starting after a few lags: ARMA; 4) all zero: data are random; 5) high values at fixed intervals: seasonal term; 6) no decay to zero: series not stationary\\
+%--------------------------------------------------------------------------------------------------------------
+\textbf{Reg with time series error} $r_t = c_0 + \beta x_t + e_t$, $e_t$ linearly independent (standard linear regression), or has its own structure (more commonly)\\
+\textbf{ARMAX} simplified: $\phi(B) r_t = c_0 + \beta x_t + \theta(B) a_t$
+\begin{equation*}
+    r_t = c_0 + \beta x_t + \phi_1 r_{t-1} +\cdots + \phi_p r_{t-p} + a_t + \theta_1 a_{t-1} + \cdots + \theta_p a_{t-p}    
+\end{equation*}
+$\beta$ indicates the impact of regressor $x_t$, t-test to rule-out\\
+\textbf{Order} apply ACF. 1) do a simple regression with regressor $x_t$ 2) estimate $e_t$ by residual 3) use ACF, PACF of the residual for order determination\\
+
+\textbf{ARIMA$(p, k, q)$} $\Delta^k p_t = (1-B)^k p_t$\\
+\textbf{Differencing} ACF with slow decay: require differencing. Differencing: significantly reduce all ACF\\
+\textbf{Order of Integration} A TS requires $k$ differencing to be stationary\\
+
+\textbf{Dickey-Fuller test} $\text{DF} = \frac{\hat{\phi}_1 - 1}{\SE_{\phi_1}} \sim \text{nonstandard t-distribution}$ test statistical significance of unit root with
+\begin{align*}
+    H_0 : \phi_1 = 1 \quad \text{in model} \quad p_t = \phi_0 + \phi_1 p_{t-1} + e_t
+\end{align*}
+Failed to reject null hypothesis $\Rightarrow$ unit root exists $\Rightarrow$ series not stationary\\
+\textbf{Augmented Dickey-Fuller test} $\frac{\hat{\beta}_0 - 1}{\SE_{\beta}} \sim \text{nonstandard t-distribution}$ test for unit-root nonstationarity, check if a differenced model is acceptable $\Delta p_t= a_t + \sum^{K-1}_{i=1} \beta_i \Delta p_{t-i}$ v.s. AR(K) $p_t = a_t + \sum^{K}_{i=1} \phi_i p_{t-1}$\\
+
+\textbf{Seasonal Model} AR polynomial has factor $\phi (B) r_t = (1-\phi B^s) \phi^{\prime} (B) r_t$\\
+\textbf{ARMAX Method} $\phi(B) r_t = \alpha + \beta \mathds{1}_t + \theta (B) a_t$\\
+
+\textbf{ARCH(m)} $a_t = \epsilon_t \sigma_t, \sigma^2 = \omega + \alpha_1 a^2_{t-1} + \cdots + \alpha_m a^2_{t-m}$, $\var(a_t \lvert \mathcal{F}_{t-1}) = \sigma^2_t \E [\epsilon^2_t \lvert \mathcal{F}_{t-1}] = \sigma^2_t$ \\
+\textbf{Turning ARCH to AR} square series $x_t = a^2_t$, innovation $\eta_t = x_t - \sigma^2_t$\\
+\vspace{-7pt}
+\begin{align*}
+    x_t = \sigma^2_t + \eta_t = \omega + \alpha_1 x_{t-1} + \cdots + \alpha_p x_{t-p} + \eta_t
+\end{align*}
+$\E_{t-1} [\eta_t] = \sigma^2_t \E_{t-1} [\epsilon^2_t -1] = 0, \E_{t-1} [\eta^2_t] = \sigma^4_t \E_{t-1} (\epsilon^2_t -1)^2 = \sigma^4_t (m_4 -1)$, where $m_4 = \E [\epsilon^4_t]$\\
+\textbf{Consequences} If $\alpha (x) = 1- \sum^m_{i=1} \alpha_i x^i$ has all roots $\abs{x} >1$ then $x_t$ is a weakly stationary time series. So are $\sigma^2_t = x_t - \eta_t, a_t = \epsilon_t \sigma_t$\\
+\textbf{Mean} $\E[a_t] = \E [\E [a_t \lvert \mathcal{F}_{t-1}]] = \E[\sigma_t] \E_{t-1} [\epsilon_t] = 0$, $\sigma_t$ is known at $t-1$\\
+\textbf{Second Moments} $\E[a^2_t] = \E [\E_{t-1} [a^2_t]] = \E[\sigma^2_t] \E_{t-1} [\epsilon^2_t] = \E [\sigma^2_t]$\\
+$\E [\sigma^2_t] = \omega + \sum^m_{i=1} \alpha_i \E [a^2_{t-1}] = \omega + \sum^m_{i=1} \alpha_i \E [\sigma^2_t] \Rightarrow \E[\sigma^2_t] = \frac{\omega}{1-\sum^m_{i=1} \alpha_i}$\\
+$\sum \alpha_i < 1 \Leftrightarrow \alpha(x)$ has all roots outside unite circle, hence stationarity\\
+\textbf{ACF, ACVF} $\gamma_l = \E{a_t a_{t+l}} = \E [\E_t [a_t a_{t+l}]] = \E [a_t] \E_t [a_{t+l}] = 0$\\
+\textbf{Forecast} Forecast of shocks are always zero,
+$\E [a_{t+l} \lvert \F_t] = \E [\E [a_{t+l} \lvert \F_{t+l-1}] \lvert \F_{t}] = \E [\sigma_{t+l} \E [\epsilon_{t+l} \lvert \F_{t+l-1}] \lvert \F_t ] = 0$\\
+Forecast error covariance of shock = forecast volatility,
+$\hat{\sigma}^2_l (l+1) = \E [a^2_{t+l} \lvert \F_t] = \E_t [\sigma^2_{t+l}] \E_{t+l-1} [\epsilon^2_{t+l}] = \E_t [\sigma^2_{t+l}]$\\
+Conditional expecation $\E_t [a^2_{t+l}] = \omega + \E_t [\eta_{t+l}] + \sum^m_{i=1} \alpha_i \E_t [a^2_{t+l-i}]$\\
+Recursive formula $\hat{\sigma}^2_t (l)= \omega + \sum^m_{i=1} \alpha_i \hat{\sigma}^2_t (l-i)$, $\hat{\sigma}^2_t(-k) = a^2_{t-k}$ is known\\
+When $l-k \leq 0$, take $\hat{\sigma}^2_t (l-k) = a^2_{t+l-k}$\\
+ARCH does not effect ACF of linear return series\\
+%L7---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+\textbf{Heavy tail} Compute kurtosis and show $>3$ or assume shocks are student-t
+\textbf{Built in Heavy Tail} Let $\epsilon_t$ be heavy tail use t-distribution with dof $\nu$
+\begin{flalign*}
+    & Z \sim \frac{X}{\sqrt{Y}}, X\sim \mathcal{N} (0, 1) , Y \sim \chi^2_{\nu}, p_{\nu} (x) = \frac{\Gamma \left(\frac{\nu+1}{2} \right)}{\sqrt{\nu \pi}\Gamma \left(\frac{\nu}{2} \right)} \left(1 + \frac{x^2}{\nu}\right)^{-\frac{\nu+1}{2}} &
+\end{flalign*}
+Much slower decay than Gaussian, variance $\frac{\nu}{\nu -2}$, model $\epsilon \sim \sqrt{\frac{\nu-2}{\nu}}Z$\\
+
+\textbf{Model Inference} OLS not accurate $x_t = \omega + \eta_t + \sum^p_{i=1} \alpha_i x_{t-i} \Rightarrow \E_{t-1} \eta^2_t = (k_4 -1)\sigma^4_t$ is not constant\\
+MLE: If $\epsilon_t \sim p(z) dz$ then $a_t = \epsilon_t \sigma_t \sim p(\mu / \sigma_t) \frac{du}{\sigma_t}$. Likelihood func is,
+$p(a_1, \dots, a_T \lvert a_0, \alpha) = \prod^T_{t=1} \frac{1}{\sigma_t} p\left(\frac{a_t}{\sigma_t}\right) $\\
+\textbf{Model Checking} Ljung-Box for no correlation, standardised residual $\hat{\epsilon}_t = \frac{a_t}{\hat{\sigma}_t}$ follow specified distribution via Jarque-Bera, QQ-plot normality test\\
+
+\textbf{GARCH(m, s)} $a_t = \epsilon_t \sigma_t, \sigma^2_t = \omega \sum^m_{i=1} \alpha_i a^2_{t-i} + \sum^s_{i=1} \beta_i \sigma^2_{t-i}, \epsilon \sim \mathcal{N} (0, 1)$\\
+\textbf{ARMA Conversion} Recall $\eta_t = a^2_t - \sigma^2_t$ is a martingale difference sequence\\
+ARCH: $\sigma^2_t = \omega + \sum^m_{i=1} \alpha_i a^2_{t-i} \Rightarrow a^2_t = \omega + \sum^m_{i=1} \alpha_i a^2_{t-i} + \eta_t$\\
+\vspace{-7pt}
+\begin{flalign*}
+    \text{GARCH: } \sigma^2_t &= \omega + \sum^m_{i=1} \alpha_i a^2_{t-i} + \sum^s_{i=1} \beta_i \sigma^2_{t-i} &\\
+    a^2_t &= \omega + \sum^m_{i=1} \alpha_i a^2_{t-i} +\sum^s_{i=1} \beta_i (a^2_{t-i} -\eta_{t-i}) + \eta_t &\\
+    &=\omega + \sum^{m\vee s}_{i=1} (\alpha_i + \beta_i ) a^2_{t-i} + \eta_t - \sum^s_{i=1} \beta_i \eta_{t-i}, m \vee s := \max(m, s)
+\end{flalign*}
+Stationary if $\sum a_i + \sum \beta_i < 1$\\
+\vspace{-7pt}
+\begin{flalign*}
+    \textbf{Variance} & \E [a^2_t] = \omega + \sum^{m \vee s}_{i=1} (\alpha_i + \beta_i) \E[a^2_{t-i}] + \eta_i -\sum^s_{i=1} \beta_i \E [\eta_{t-i}] &\\
+    & \E [a^2_t] = \frac{\omega}{1 - \sum^{m \vee s}_{i=1} (\alpha_i + \beta_i)} = \frac{\omega}{1 - \sum^m_{i=1} \alpha_i - \sum^s_{i=1} \beta_i}
+\end{flalign*}
+\textbf{Variance Forecast} $\E_t [\eta_{t+l}] = \E_t [\E_{t+l-1}[\eta_{t+l}] ] = 0$, $\E_t [\eta_{t-l}] = a^2_{t-l} -\sigma^2_{t-l} $,
+$\E_t [a^2_{t+l}] = \omega +\sum^{m \vee s}_{i=1} (\alpha_i + \beta_i) \E_t[a^2_{t+l-i}] + \E_t [\eta_{t+l}] - \sum^s_{i=1} \beta_i \E_t [\eta_{t+l-i}]$\\
+Advantage: Volatility stationary within a range; Volatility cluster, big shocks leads to high volatility. Constraints: Symmetric for positive and negative shock; No risk premium; Leverage effect, negative shocks have stronger effect; All coefficients need to be positive\\
+
+\textbf{Integrated GARCH} easy to compute $\sum_i (\alpha_i + \beta_i) = 1, a_t = \epsilon_t \sigma_t, \sigma^2_t = \omega + \sum^m_{i=1} \alpha_i a^2_{t-i} + \sum^s_{i} \beta_i \sigma^2_{t-i}$\\
+No longer stationary, $\E [\sigma^2_t] = \frac{\omega}{1 - \sum (\alpha_i + \beta_i)}$, $\E_t [\sigma^2_{t+l}] = (l-1)\omega + \sigma^2_{t+1}$\\
+
+\textbf{GARCH-M} Risk-averse pricing: risk increases prices $r_t = \mu + c\sigma^2_t + a_t$, $a_t = \sigma_t \epsilon_t$, $\sigma^2_t = \omega + \sum \alpha_i a^2_{t-i} +\sum \beta_i \sigma^2_{t-i} $ ARCH effect on mean, ACF\\
+ARCH effect induces correlations to $\sigma^2_t$, $\sigma^2_t$ is induced in the return process\\
+
+\textbf{Threshold GARCH} One way to model asymmetry $\sigma^2_t = \alpha_0 + \sum^s_{i=1} (\alpha_i + \gamma_i N_{t-i})a_{t-i}^2 + \sum^m_{j=1} \beta_j \sigma^2_{t-j} $, $N_{t-i} = 1$ if $a_{t-i} < 0$, $0$ otherwise. Model leverage, coefficient constraint\\
+\textbf{Exponential GARCH} Models log volatility, no positive constraint on coef
+\begin{align*}
+    a_t = \sigma_t \epsilon_t, \log (\sigma^2_t) = \alpha_0 + \frac{1+\sum^{S-1}_{i=1} \beta_i B^i }{1- \sum^m_{i=1}\alpha_i B^i } g(\epsilon_{t-1})
+\end{align*}
+Weighted innovation $g(\epsilon_t) = \theta \epsilon_t + \gamma [\abs{\epsilon_t} - \E [\abs{\epsilon_t}]]$ models leverage.\\
+Inclusion of $\E [\abs{\epsilon_t}]: \E [g(\epsilon_t)] =0$; Asymmetric, $\theta<0$ so $g(-x) > g(x)$\\
+Large shocks $\Rightarrow$ strong asymmetry ($\frac{\sigma \lvert_{\epsilon_{t-1}} = -x}{\sigma \lvert_{\epsilon_{t-1}} = x} = \exp(-2\theta x)$)  Leverage\\
+
+\textbf{CHARMA} $a_t = \sum^{m}_{i=1} \delta_{i, t} a_{t-i} + \eta_t$, $(\delta_{1, t}, \dots, \delta_{m, t})$ i.i.d. with variance $\Omega$\\
+$\sigma^2_t = \sigma^2_{\eta} + \sum^m_{i=1} \alpha_i a^2_{t-1} $ if $\Omega$ is diagonal, because,\\
+\vspace{-7pt}
+\begin{align*}
+    \sigma^2_t = \E_{t-1} [a^2_t] &= \E_{t-1} [(\sum^{m}_{i=1} \delta_{i, t} a_{t-i} + \eta_t)^2] \\
+    &= \sigma^2_{\eta} + (a_{t-1}, \dots, a_{t-m})\Omega (a_{t-1}, \dots, a_{t-m})^T
+\end{align*}
+\textbf{Value at Risk} $\Delta V(l) = V_{t+l} - V_t$ has probability $p$ to go over this value
+\begin{flalign*}
+    & p = \prob [\Delta V(l) \leq \VAR_{1-p}] = F_l (\VAR_{1-p}) \quad \text{long position} &\\
+    & p = \prob [\Delta V(l) \geq \VAR_{1-p}] =1 - F_l (\VAR_{1-p}) \quad \text{short position}&
+\end{flalign*}
+\textbf{Expected Shortfall} Expected loss $X$ with extreme events $\ES_{1-p} = \E (X \lvert X > \VAR_{1-p}) = \frac{\int^{\infty}_{\VAR_{1-p} x f(x) dx}}{\prob (X > \VAR_{1-p})}$, $X -\Delta V(l)$ for long\\
+\textbf{Normal Closed Form} $\ES_{1-p} = \mu + \frac{f(Z(1-p))}{p} \sigma$\\
+\textbf{T-distribution} $\ES_{1-p} = \mu + a\frac{f(T_{\nu} (1-p))}{p} \left(\frac{\nu + T^2_{\nu} (1-p)}{\nu-1} \right)$\\
+\textbf{Gaussian Approximate} short: $\VAR_{1-p} = \E_t [r_t [l]] + z_{1-p}\sigma_t [l]$ long: $\VAR_{1-p} = \E_t [r_t [l]] - z_{1-p}\sigma_t [l]$, $\ES_{1-p} = \E_t [r_t [l]] - \frac{f(z_{1-p})}{p} \sigma_t [l]$\\
+
+\textbf{General Econometric model} $\phi (B) r_t  = c_0 + \theta (B)a_t, a_t = \sigma_t \epsilon_t, \beta(B) \sigma^2_t = \omega + \alpha(B) a^2_{t-1}$\\
+\textbf{Forecast} $r_t [l] = \sum^l_{k=1} \hat{r}_t (k) + \sum^l_{k=1} e_t (k) $,
+$\E_t [r_t [l]] = \sum^l_{k=1} \hat{r}_t (k), \var (r_t [l] \lvert \F_t) = \var (\sum^l_{k=1} e_t (k) \lvert \F_t)$\\
+
+\textbf{Empirical Quantile Fitting} $p^{\mathrm{th}}$ quantile of $r_{t}$, if $p = \frac{k}{T}$, $\hat{r}_p = r_{(k)}$; if $p \in (\frac{k}{T}, \frac{k+1}{T})$, $\hat{r}_p = (k+1 - Tp)r_{(k)} + (Tp - k)r_{(k+1)}$\\
+\textbf{Accuracy} If $p = \frac{k}{T}, \hat{r}_p = r_{(k)}$, by CLT, $r_{(k)} \sim \mathcal{N} \left( F_{\mu}(p), \frac{p(1-p)}{T [f_{\mu} (F_{\mu}(p))]^2} \right)$\\
+Parametric: More accurate, but rely on model structure to be correct; Non-parametric: Operate totally on data, model free, but not very accurate; Semi-parametric: something in between, part para; part non-para\\
+
+\textbf{Polynomial tails} $f(x) \sim A x^{-(\alpha+1)}$ when $x$ is large, $a$ is shape parameter\\
+Heavy tails: $x^{-(\alpha+1)} \gg \exp (x^2 / 2\sigma^2)$;\\ 
+Student t-distribution $f(x) \sim (1+x^2 / \nu )^{-(\nu + 1)/2}$ approx polynomial tail\\
+
+\textbf{Risk Measure} $p = \prob (X>z) = \int^{\infty}_z Ax^{-(\alpha+1)} dx = \frac{A}{\alpha} z^{-\alpha} $\\
+VaR: $z = \exp(-\alpha^{-1} (\log p + \log A - \log \alpha) ) = \left( \frac{A}{\alpha} \right)^{\frac{1}{\alpha}} p^{-\frac{1}{\alpha}}$\\
+Expected shortfall $p^{-1} \int^{\infty}_{\VAR} xf(x) dx = p^{-1} \int^{\infty}_{\VAR} Ax^{-\alpha} dx = \frac{Ap^{-1}}{\alpha}\VAR^{1-\alpha} = \frac{\VAR}{1 - \alpha^{-1}} $\\
+\textbf{VaR Estimation} $p<p_0, \frac{\VAR_{1-p}}{\VAR_{1-p_0}} = \frac{p^{-1/\alpha}}{p_0^{-1/\alpha}} \Rightarrow \VAR_{1-p} = \frac{p^{-1/\alpha}}{p_0^{-1/\alpha}}\VAR_{1-p_0}$ Suppose $\alpha$ is known, then $p$ may be estimated using a larger $p_0$\\
+\textbf{Hill estimator} uses all data greater than $C$, for $x\geq C$, $f(x) \sim A x^{-(\alpha+1)}$\\
+Conditional density of X, $f(x \lvert X\geq C) = \alpha C^\alpha x^{-(\alpha+1)}$.\\
+Let $r_{(1)}, \dots, r_{(T)}$ be ordered data, $T_C$ of them are above $C$, use MLE, $\log(L_a) = \sum^T_{T-T_C+1} \log \alpha + \alpha \log C - (\alpha+1 ) \log r_{(i)} $\\
+\vspace{-7pt}
+\begin{flalign*}
+    & \text{Derivative against} \alpha, \frac{T_c}{\alpha} = \sum^{T}_{i=T-T_c + 1} \log (r_{(i)} / C)\Rightarrow \hat{\alpha} = \frac{T_C}{\sum^{T}_{i} \log (r_{(i)} / C) } &
+\end{flalign*}
+Models with stronger variance likely have larger VaR, $\VAR_{1-p} = \mu + \sigma z_{1-p}$; Models with heavier tail have larger VaR for small $p$\\
+
+\textbf{Monte Carlo} $\frac{1}{n} (\sum^n_i f(X_i)) \sim \mathcal{N} \left(\E[f(X)], \frac{1}{n} \var (f(X))\right)$ by CLT
+\textbf{Variance} When $f(X) = X, var(f(X) = \var(X)$; when $f(X) = \mathds{1}_{X>z}$, with $\prob(X>z) = p$, $\var (f) = p(1-p)^2+ (1-p)p^2 = p(1-p)$\\
+Relative error $\sqrt{\var (\hat{f})} / \E [\hat{f}] = \sqrt{1-p} / \sqrt{np}$\\
+
+\textbf{CAPM} Random vector $\bm{r}_t \in \mathbb{R}^k$; mean $\E [\bm{r}_t] = (\E [r_{1, t}], \dots, \E [\bm{r}_{k, t}])^T$, $\cov{\bm{r}_t} = \begin{pmatrix}
+    \cov{r_{1, t}, r_{1, t}} &\cdots &\cov{r_{1, t}, r_{k, t}}\\
+    \vdots &\ddots &\vdots\\
+    \cov{r_{k, t}, r_{1, t}} & \cdots &\cov{r_{k, t}, r_{k, t}}
+\end{pmatrix}$\\ 
+Stationarity: $[\bm{r}_1 , \dots , \bm{r}_t] \sim [\bm{r}_{1+s}, \dots, \bm{r}_{t+s}]$\\
+If invest money $w^T = (w_1, \dots, w_k)$ to assets, return $w^T \bm{r}$, $\E[r_p] = w^T \mu_r$, $\sigma^2_p = w^T \Sigma w$. Borrow $w_1 + \cdots + w_k - 1$ from bank
+
+\begin{Ex}
+    Consider three assets with returns in percentage. Find the portfolio with $4\%$ of return and the minimum variance, sharpe ratio
+    $\mu_r = \begin{bmatrix}
+        1\\4\\3
+    \end{bmatrix}, \Sigma=\begin{bmatrix}
+        2 &1 &0 \\
+        1 &6 &2 \\
+        0 &2 &10
+    \end{bmatrix}$\\
+    $\frac{1}{a} \mu^T_r \Sigma^{-1} \mu^r = 4 \Rightarrow a = \frac{53}{136}, w^T = \frac{1}{a} \mu^T_r \Sigma^{-1} = \frac{1}{53} [56, 24, 36]$ Thus buy $\frac{56}{53}, \frac{24}{53}, \frac{36}{53}$ of asset 1, 2, 3; borrow $\frac{56+24+36}{53} - 1$. Sharp ratio $\sqrt{\mu^T_r \Sigma^{-1} \mu_r}$
+\end{Ex}
+
+\textbf{Optimisation} $\text{max}_w W^T\mu_r, \text{subject to} \frac{1}{2}w^T \Sigma w \leq \delta $\\
+\textbf{Lagrangian multiplier} Need to solve $\mathrm{max}_w w^T \mu_r - \frac{1}{2} aw^T\Sigma w$\\
+Taking gradient $\nabla F(w) = \mu_r - a\Sigma w$; Optimal portfolio $w = \frac{1}{a} \Sigma^{-1} \mu_r$\\
+Return of efficient portfolio $r_p = w^T \mu_r = a^{-1} \mu_r^T \Sigma^{-1} \mu_r $\\
+Risk of efficient portfolio $\sigma_p = \sqrt{w^T \Sigma w} = a^{-1} \sqrt{\mu^T_r \Sigma^{-1} \mu_r }$\\
+\textbf{Sharpe Ratio} $\frac{r_p}{\sigma_p} = \sqrt{\mu^T_r \Sigma^{-1} \mu_r}$\\
+In general, risk free rate $r_f \neq 0$, use $\Delta \mu_r = \mu_r - 1_{r_f}$, then,
+$r_p = r_f + a^{-1} \Delta \mu^T_r \Sigma^{-1} \Delta \mu_r, \sigma_p = a^{-1} \sqrt{\Delta\mu^T_r \Sigma^{-1} \Delta\mu_r}$\\
+\textbf{Sharpe ratio} $\frac{r_p - r_f}{\sigma_p} = \sqrt{\Delta\mu_r \Sigma^{-1} \Delta \mu_r}$\\
+\textbf{Univeriate ACVF} $\gamma_l = \cov{r_t, r_{t-l}}$\\
+\textbf{Cross Covariance} for A, B $\gamma_{A, B} (l) = [\Gamma_l]_{A, B} = \cov{r_{A, t}, r_{B, t-l}}$\\
+Cross covariance matrix $\Gamma_l = \begin{bmatrix}
+    \gamma_A (l) &\gamma_{A, B} (l)\\
+    \gamma_{B, A} (l) &\gamma_A (l)
+\end{bmatrix} = \begin{bmatrix}
+    \cov{r_{A, t}, r_{A, t-l}} &\cov{r_{A, t}, r_{B, t-l}}\\
+    \cov{r_{B, t}, r_{A, t-l}} &\cov{r_{B, t}, r_{B, t-l}}
+\end{bmatrix}$\\
+\textbf{Asymmetric} $\cov{r_{A, t}, r_{B, t-l}}\neq \cov{r_{B, t}, r_{A, t-l}}, \Gamma^T_l = \Gamma_{-l}$\\
+
+\textbf{Cross Correlation} $rho_{A, B} (l) = \operatorname{cor}(r_{A, t}, r_{B, t-l}) = \frac{\cov{r_{A, t}, r_{B, t-l}}}{\sqrt{\var(r_A) \var(r_B)}}$\\
+$\rho_l = \begin{bmatrix}
+    \cov{r_{A, t}, r_{A, t-l}} &\cov{r_{A, t}, r_{B, t-l}}\\
+    \cov{r_{B, t}, r_{A, t-l}} &\cov{r_{B, t}, r_{B, t-l}}
+\end{bmatrix} = D^{-1}\Gamma_l D^{-1}$ is asymmetric, 
+$D^2 = \begin{bmatrix}
+    \var(r_A)&0\\0&\var(r_B)
+\end{bmatrix}$\\
+$\rho_{A, B} (0) \neq 0$ concurrent linear relation between $r_{A ,t}, r_{B, t}$; $\rho_{A, B} (0) = 0$ no concurrent\\
+Asset A leads B: $\rho_{B, A} (l) = \operatorname{cor} (r_{A, t-l}, r_{B, t}) \neq 0$ for $l> 0$\\
+\textbf{Unidirectional} $A \mapsto B$ but $B \nrightarrow A$ \textbf{Feedback loop} $A\mapsto B$ and $B\mapsto A$\\
+\begin{tabular}{|c|c|c|}\hline
+     &$\forall l>0, \rho_{A, B} (l) = 0$ &$\exists l>0, \rho_{A, B} (l) \neq 0$  \\ \hline
+   $\forall l>0, \rho_{B, A} (l) = 0$  &No leading-la &B leads A \\ \hline
+   $\exists l>0, \rho_{B, A} (l) \neq 0$ &A leads B &Feedback \\ \hline
+\end{tabular}\\
+Sample version $\hat{\Gamma}_t = \frac{1}{T} \sum^T_{t=l+1} (\bm{r}_t - \bar{\bm{r}}) (\bm{r}_{t-l} - \bar{\bm{r}})^T $ only concern lags $l \ll T$\\
+Sample cross-correlation $\hat{\rho}_l = \hat{D}^{-1} \hat{\Gamma}_l \hat{D}^{-1}, \hat{D}^2 = \mathrm{diag} ([\hat{\Gamma}_0]_{A, A}, [\hat{\Gamma}_0]_{B, B})$\\
+If $\bm{r}_t$ has zero $\rho_l$, SE of $\hat{\rho}_{A, B} (l)$ is $\frac{1}{\sqrt{T}}$\\
+$B\mapsto A$: positive (negative) lead $\hat{\rho}_{A, B} (l) > 1.96\SE (<-1.96\SE)$\\
+
+\textbf{Portmanteau Test} Replace Ljung-Box for $H_0: \rho_0 = I_k, \rho_1 = \cdots = \rho_m = 0$
+\begin{align*}
+    Q_k (m) = T^2 \sum^m_{l=1} \frac{1}{T-l} \mathrm{tr} (\hat{\Gamma}^{\prime}_l \hat{\Gamma}^{-1}_0 \hat{\Gamma}_l \hat{\Gamma}^{-1}_0) \sim \chi^2_{k^2 m}
+\end{align*}
+$k^2$ because $k^2$ entries in matrix. If $H_0$ rejected, the model is not adequate\\
+
+\textbf{VAR(1) model} $\bm{r}_t = \phi_0 + \Phi \bm{r}_{t-1} + \bm{a}_t$.\\ 
+\textbf{Mean} $\E [\bm{r}_t] = \phi_0 + \Phi \E [\bm{r}_t] \Rightarrow \E [\bm{r}_t] = (1-\Phi)^{-1} \phi_0 $\\
+\textbf{Autocovariance} Yule walker $\Gamma_l = \cov{\bm{r}_t, \bm{r}_{t-l}} = \cov{\Phi \bm{r}_{t-l}+\bm{a}_t, \bm{r}_{t-l}} = \Phi \Gamma_{l-1} \Rightarrow \Gamma_l = \Phi^l \Gamma_0$\\
+$\Gamma_0 = \cov{\bm{r}_t, \bm{r}_t} = \Phi \cov{\bm{r}_t, \bm{r}_t} \Phi^T + \cov{\bm{a}_t, \bm{a}_t} = \Phi\Gamma_0 \Gamma^T +\Sigma_a $ Lyapunov\\
+\textbf{Forecast} $\E_t [\bm{r}_{t+l}] = \phi_0+ \Phi_1 \bm{r}_{t+l-1}, e_{t+l} = a_{t+1}, e_{t+2} = \Phi e_{t+1} + a_{t+2}$\\
+\textbf{VAR(p)} $\bm{r}_t = \phi_0 + \bm{a_t} + \sum^p_{i=1} \Phi_i \bm{r}_{t-i}, \bm{a}_t \sim \mathcal{N} (0, \Sigma_a) $\\
+Or $(I - \Phi_1 B - \Phi_2 B^2 - \cdots - \Phi_p B^p) \bm{r}_t = \phi_0+\bm{a}_t$ Or $\Phi (B) = \phi_0+\bm{a}_t$\\
+$\mathrm{VAR}(1): \bm{r}_t = \phi_0 + \Phi \bm{r}_{t-1} +\bm{a}_t \Leftrightarrow (I - \Phi B)\bm{r}_t = \bm{a}_t$\\
+Inversion of $(I - \Phi B)$: $(I - \Phi B)^{-1} = I + \Phi B + \Phi^2 B^2 + \cdots$\\
+Conversion to VMA: $\bm{r}_t = (I - \Phi B)^{-1}(\phi_0 + \bm{a}_t) = \mu_r + \sum^{-\infty}_{t=0} \Phi^i \bm{a}_{t-i}$\\
+\textbf{Stationary Condition} $\rho(\Phi) = \max_i \{\abs{\lambda_i} \} < 1$, in univariate case: $\abs{\phi} < 1$. Equivalently with char function $\Phi (x) = 1- \Phi x $. Root of $\det (\Phi(x)) = 0$ outside unit circle.\\
+\textbf{Mean} $(I - \Phi_1 - \cdots - \Phi_p) \E[\bm{r}_t] = \Phi (I) \E[\bm{r}_t] = \phi_0 +\E \bm{a}_t = \phi_0 \Rightarrow \mu_r = \Phi(I)^{-1} \phi_0 $\\
+\textbf{Cross Covariance matrix} $\cov{\bm{r}_t, \bm{r}_t} = \Sigma_a + \Phi_1 \cov{\bm{r}_{t-1}, \bm{r}_t} + \cdots + \Phi_p \cov{\bm{r}_{t-p}, \bm{r}_t} $\\
+$\Gamma_0 = \Sigma_a + \Phi_1 \Gamma^T_1 + \cdots + \Phi_p \Gamma^T_p$\\
+$\cov{\bm{r}_t, \bm{r}_{t-l}} = \Phi_1 \cov{\bm{r}_{t-1}, \bm{r}_{t-l}} + \cdots + \Phi_p \cov{\bm{r}_{r-p}, \bm{r}_{t-l}} $\\
+$\Gamma_l = \Phi_1 \Gamma_{l-1} +\Phi_2 \Gamma_{l-2} + \cdots + \Phi_p \Gamma_{l-p} $\\
+
+\textbf{VMA(q)} $\bm{r}_t = \theta_0 + \bm{a}_t + \Theta_1 \bm{a}_{t-1} + \cdots + \Theta_q \bm{a}_{t-q} $\\
+$\E [\bm{r}_t] = \theta_0, \quad \cov{\bm{r}_t} = \Sigma_a + \Theta_1 \Sigma_a \Theta^{\prime}_1 + \cdots + \Theta_q \Sigma_a + \Theta^{\prime}_q $\\
+
+\textbf{VARMA(p, q)} $\Phi(B) \bm{r}_t = \phi_0 + \theta(B) \bm{a}_t $\\
+\textbf{Marginal Form} $L(B) \Phi(B) \bm{r}_t = L(B) \phi_0 + L(B) \Theta (B) \bm{a}_t $, $L(B)$ is adjugate matrix of $\Phi (B)$, then $L(B) \Phi(B)$ is diagonal with identical entries\\
+Let $C$ be the adjugate matrix of $A$, then $C\cdot A = C\cdot A = \det (A) I$
+\vspace{-3pt}
+\begin{flalign*}
+\hspace{-5pt}
+    & AIC(i) = \log (\lvert \Tilde{\Sigma}_i \rvert ) + \frac{2k^2 i}{T}, BIC(i) = \log (\lvert \Tilde{\Sigma}_i \rvert ) + \frac{2k^2 i \log T}{2}, \Tilde{\Sigma}_i = \frac{1}{T} \sum^T_{t=i+1} \hat{a}_t \hat{a}_t^T &
+\end{flalign*}
+\textbf{Unitroot Stationary} $p_t = p_{t-1} + a_t$, $\cov{p_t, p_{t+l}} = \cov{p_t, p_t} = t\sigma^2_a$, $\E [\hat{\gamma}_l] = \E[\frac{1}{T-l}\sum^{T-l}_{t=1} p_t p_{t+l} ] = \frac{T-l}{2} \sigma^2_a \Rightarrow \hat{\gamma}_l / \hat{\gamma}_0 \approx \frac{T-l}{T}$\\
+
+\textbf{Co-integration} Let $x_t, y_t$ be two uni-root non-stationary TS, suppose $x_t, y_t$ share common source of nonstationarity, then $\exists \beta_x, \beta_y$ s.t. $\beta_y x_t - \beta_x y_t$ is stationary\\
+Application: Pairwise trading strategy: finding stationary portfolio\\
+
+Consider VAR(1) $\bm{x}_t = \phi_0 + \Phi \bm{x}_{t-1} + a_t$ If $\rho (\Phi) = 1$, look for $\bm{y}_t = L\bm{x}_t$\\
+$\bm{y}_t = L\phi_0 + L\Phi \bm{x}_{t-1} +La_t = L\phi_0 + L\Phi L^{-1} \bm{y}_{t-1} +La_t $. Suppose $L\Phi L^{-1} = \begin{bmatrix}
+    \Phi_1 &0 \\ 0 &\Phi_2
+\end{bmatrix}, \rho (\Phi_1) < 1, \rho(\Phi_2) = 1$,
+$\begin{bmatrix}\bm{y}^1_t\\\bm{y}^2_t \end{bmatrix} = \begin{bmatrix}\Phi_1 \bm{y}^1_t\\\Phi_2 \bm{y}^2_t \end{bmatrix} + \begin{bmatrix}
+    [L\phi_0]_1 \\ [L\phi_0]_2
+\end{bmatrix} + \begin{bmatrix}
+    [La_t]_1 \\ [La_t]_2
+\end{bmatrix}$, $\bm{y}^1_t$ will be stationary\\
+Consider $\Phi = S^{-1} J S$, with e'value increasing, $S\Phi_1 S^{-1}$ block diagonal, rows of $S$ are left e'vector of $\Phi$, so $v^T \Phi = \lambda v^T$\\
+If $\abs{\lambda} < 1$, $v^T$ is co-integration vector $\bm{x}_t = \phi_0 + \Phi \bm{x}_{t-1} + a_t $\\
+$v_t = v^T \bm{x}_t =v^T \phi_0 + v^T \Phi \bm{x}_{t-1} + v^T a_t = v^T \phi_0 + \lambda v_{t-1} + v^T a_t $, AR(1), hence stationary\\
+
+For AR(1) $\bm{x}_t$ is $l(1)$ so $\Delta \bm{x}_t = \bm{x}_t - \bm{x}_{t-1}$ is stationary\\
+$u^T \bm{x}_{t-1} = v^T (I-\Phi )\bm{x}_{t-1} = v^T [-\Delta \bm{x}_t + a_t]$ is trend-stationary\\
+$\forall v^T, v^T (I-\Phi )\bm{x}_{t-1}$ is stationary; $if u^T \neq 0, u^T$ is cointegration vector\\
+$v^T$ not in null space of $I-\Phi$; linear comb of left e'vec of $\Phi$ with e'value $<1$\\
+
+\textbf{Error Correction Form} VAR(p) with mean removed $\bm{x}_t = \Phi_1 \bm{x}_{t-1} + \cdots + \Phi_p \bm{x}_{t-p} + a_t$. Consider $\Delta \bm{x}_t = \bm{x}_t - \bm{x}_{t-1}$, $\Delta \bm{x}_t = \Pi \bm{x}_{t-1} + \Phi^{*}_{1}\Delta \bm{x}_{t-1} + \cdots + \Phi^{*}_{p-1} \Delta \bm{x}_{t-p+1} + a_t $, where $\Phi^{*}_{p-1} =-\Phi_p $, $\Phi^{*}_{k} = \Phi_k - \Phi^{*}_{k+1} $, $\Pi = \Phi_1 - \Phi^{*}_{1} - I $\\
+Check rank of $\Pi$: a) Rank $0$: no co-integration b) Rank $k$: stationary process, no integration c) Rank $0<m<k$: co-integration, with $k-m$ unit root. Each left e'vec of $\Pi$ with nonzero e'val signals a linear independent portfolio trading strategy. Let $w_t = v^T \bm{x}_t$, $v^T \Pi =\lambda v^T$, below eq stationary,
+$w_{t-1} =\frac{1}{\lambda} v^T (\Delta \bm{x}_t - \Phi^{*} \Delta \bm{x}_{t-1}- \cdots - \Phi^{*}_{p-1} \Delta \bm{x}_{t-p-1} -a_t) $\\
+Apply to VARMA(p, q) $\bm{x}_t = \Phi_1 \bm{x}_{t-1} + \cdots + \Phi_p \bm{x}_{t-p} + \Theta(B)a_t $.\\ 
+Convert form: $\Delta \bm{x}_t = \Pi \bm{x}_{t-1} + \Phi^*_{1} \Delta \bm{x}_{t-1} +\cdots + \Phi^*_{p-1} \Delta \bm{x}_{t-p} +\Theta (B) a_t $,\\
+$w_{t-1} =\frac{1}{\lambda} v^T(\Delta \bm{x}_t -\Phi^*_{1}\Delta\bm{x}_{t-1} - \cdots - \Phi^*_{p-1} \Delta \bm{x}_{t-p} -\Theta(B) a_t ) $ stationary\\
+
+\textbf{Phillips-Ouliaris test} $H_0$: residuls are unit root stationary. If rejected, the multivariate have co-integration. Check ACF and Ljung-Box for simplicity
+ 
+\end{multicols*}
+\end{document}

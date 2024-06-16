@@ -1,0 +1,520 @@
+\documentclass[12pt,landscape, a4paper]{article}
+\usepackage{multicol}
+\usepackage{calc}
+\usepackage{ifthen}
+\usepackage[landscape]{geometry}
+\usepackage{hyperref}
+\usepackage[english]{babel}
+\usepackage{amsthm}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{enumitem, kantlipsum}
+\usepackage[nopar]{lipsum}
+\usepackage[T1]{fontenc}
+\usepackage{dsfont}
+% \usepackage{unicode-math}
+% \setmathfont{XITS Math}
+% \usepackage{fontspec}
+% \setmainfont{TeX Gyre Pagella}
+\usepackage[scr=boondox]{mathalpha}
+\usepackage{pxfonts}
+
+\geometry{top=0.45cm,left=0.45cm,right=0.45cm,bottom=0.45cm}
+
+% Turn off header and footer
+\pagestyle{empty}
+ 
+
+% Redefine section commands to use less space
+\makeatletter
+\renewcommand{\section}{\@startsection{section}{1}{0mm}%
+                                {-0.5ex plus -.2ex minus -.2ex}%
+                                {0.2ex plus .2ex}%x
+                                {\small\small\bfseries}}
+
+\renewcommand{\subsection}{\@startsection{subsection}{1}{0mm}%
+                                {-0.5ex plus -.2ex minus -.2ex}%
+                                {0.2ex plus .2ex}%x
+                                {\scriptsize\scriptsize\bfseries}}
+                                
+% Don't print section numbers
+\setcounter{secnumdepth}{0}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0pt plus 0.5ex}
+
+\theoremstyle{remark}
+\newtheorem*{thm}{Thm}
+\newtheorem*{defn}{Def}
+\newtheorem*{lemma}{Lemma}
+\newtheorem*{corollary}{Corollary}
+\newtheorem*{question}{Question}
+\newenvironment{soln}{\begin{proof}[Solution]}{\end{proof}}
+
+\newcommand{\var}{\operatorname{Var}}
+\newcommand{\E}{\operatorname{\mathbb{E}}}
+\newcommand{\prob}{\operatorname{\mathbb{P}}}
+\newcommand{\cov}{\operatorname{Cov}}
+\newcommand{\R}{\mathcal{R}}
+\newcommand{\VaR}{\mathrm{VaR}}
+\newcommand{\CVaR}{\mathrm{CVaR}}
+\newcommand{\EL}{\mathrm{EL}}
+\newcommand{\ES}{\mathrm{ES}}
+\newcommand{\EV}{\mathrm{EV}}
+\newcommand{\CF}{\mathrm{CF}}
+\newcommand{\Dom}{\operatorname{Dom}}
+\newcommand{\PD}{\mathrm{PD}}
+\newcommand{\EAD}{\mathrm{EAD}}
+\newcommand{\LGD}{\mathrm{LGD}}
+\newcommand{\corr}{\operatorname{Corr}}
+\newcommand{\dd}{\partial}
+\newcommand{\N}{\mathcal{N}}
+\newcommand{\Q}{\mathbb{Q}}
+
+
+
+\begin{document}
+
+\setlength{\abovedisplayskip}{0pt}%
+\setlength{\belowdisplayskip}{0pt}%
+\setlength{\abovedisplayshortskip}{0pt}%
+\setlength{\belowdisplayshortskip}{0pt}%
+\setlength{\jot}{0pt}% Inter-equation spacing
+
+\fontfamily{phv}
+
+\raggedright
+\tiny
+%\scriptsize
+\begin{multicols*}{3}
+\textbf{Duration} $\mathcal{D} := \sum^n_{i=1} t_i \left(\frac{c_i e^{-yt_i}}{B} \right) = \sum^n_{i=1} t_i \left(\frac{c_i}{B (1+y/m)^{m\cdot t_i} } \right)$\\
+Duration provides a measure of how long on average the holder of the bond has to wait before receiving cash payments
+$\frac{\Delta B}{B} \approx - \mathcal{D} \Delta y; \Delta B \approx - \frac{B \mathcal{D}\Delta y }{1+ y/m}\quad$
+\textbf{Modified Duration} $\mathcal{D}^* := \frac{\mathcal{D}}{1 + y/m} $ \\
+Modified duration and Macauley duration coincide when yield expressed continuously compounded\\
+
+\textbf{Convexity} $\mathcal{C} = \frac{\sum^n_{i=1}c_i t^2_i \exp(-yt_i) }{B}\qquad$
+$\mathcal{C} = \frac{1}{B} \frac{d^2 B}{dy^2} \Rightarrow \frac{\Delta B}{B} \approx -\mathcal{D} \Delta y + \frac{1}{2} \mathcal{C} (\Delta y)^2$\\
+Duration measures the effect of a small parallel shift in yield curve; Duration plus convexity measure the effect of a larger parallel shift in yield curve\\
+
+\textbf{Partial Duration} $\mathcal{D}^i := \frac{1}{P} \frac{\Delta P_i}{\Delta y_i}$, $\Delta y_i$ size of small change made to $i$ th point of yield curve; $P$ portfolio value; $\Delta P_i$ resultant change of portfolio value\\
+A partial duration calculates effect on a portfolio of a change to just one point on zero curve\\
+The percent change in portfolio value arising from $\Delta y_i$ is $-\mathcal{D}^i \Delta y_i$\\
+
+\textbf{Economic Value} $\EV$ of a series of cash flow $\CF = \{\CF(t_k), t_k\geq t \}$ is present value of these cash flows $\EV = \sum_{t_k \geq t} \CF (t_k) B(t, t_k)$, $B(t, t_k)$ discount factor for the maturity date $t_k$\\
+\textbf{Economic Value of Equity} specific form of EV where equity is excluded from cash flows\\
+$\EV_E = \EV_A - \EV_{L^*}$ and $\Delta (\EV_E)_s = (\EV_E)_s - (\EV_E)_0$, then $\EV_E 
+= \sum_{t_k \geq t} \CF_A (t_k) B(t, t_k) - \sum_{t_k \geq t} \CF_{L^*} (t_k) B(t, t_k)$\\
+
+\textbf{Duration of Portfolio} $\mathcal{D} = \sum^m_{j=1} w_j \mathcal{D}_j, w_j = V_j/V$, $V_j$ value of j-th cash flow stream\\
+\textbf{Duration of Equity} $\mathcal{D}_{\text{Gap}} = \mathcal{D}_A - \frac{\EV_{L^*}}{\EV_A} \mathcal{D}_{L^*}$,
+$\mathcal{D}_E = \frac{\EV_A}{\EV_A - \EV_{L^*}} \mathcal{D}_A - \frac{\EV_{L^*}}{\EV_A - \EV_{L^*}} \mathcal{D}_{L^*} = \frac{\EV_A}{\EV_A - \EV_{L^*}} \mathcal{D}_{\text{Gap}}$\\
+Alternatively, $\mathcal{D}_E = \frac{\EV_A}{\EV_A - \EV_{L^*}} \mathcal{D}_{\text{Gap}} = \mathcal{L}_{A/E} \mathcal{D}_{\text{Gap}}$, $\mathcal{L}_{A/E}$ leverage ratio\\
+$\Delta \EV_E \approx -\mathcal{D}_E \cdot \EV_E \cdot \Delta y \approx -\mathcal{D}_{\text{Gap}} \cdot \EV_A \cdot \Delta y $\\
+% \begin{flalign*}
+%     &\textbf{Estimated Vol } \sigma^2_n := \frac{1}{m-1} \sum^m_{i=1} (u_{n-i} -\bar{u})^2, u_i := \ln\left(\frac{S_i}{S_{i-1}} \right), \bar{u} =\frac{1}{m} \sum^m_{i=1} u_{n-i} &
+% \end{flalign*}
+\textbf{Estimated Vol } $\sigma^2_n := \frac{1}{m-1} \sum^m_{i=1} (u_{n-i} -\bar{u})^2, u_i := \ln\left(\frac{S_i}{S_{i-1}} \right), \bar{u} =\frac{1}{m} \sum^m_{i=1} u_{n-i}$\\
+
+\textbf{Simplified Vol Estimation} $\sigma^2_n = \frac{1}{m} \sum^m_{i=1} u^2_{n-i}$ or $\sigma^2_n = \frac{1}{m} \sum^m_{i=1} \alpha_i u^2_{n-i}$ with weight \\
+
+\textbf{ARCH(m)} $\sigma^2_n = \gamma V_L + \sum^m_{i=1} \alpha_i u^2_{n-i}$, $V_L$ long-run variance rate, $\gamma + \sum^m_{i=1} \alpha_i = 1$ for $\gamma \geq 0$\\
+
+\textbf{EWMA} $\sigma^2_n = \lambda \sigma^2_{n-1} + (1-\lambda) u^2_{n-1}$ for some $\lambda \in [0, 1]$\\
+Advantages: 1)Relatively little data needs to be stored; 2) Only remember the current esitmate of variance rate and the most recent observation on market variable; 3) $\lambda=0.94$ has been found to be a good choice across a wide range of market variables\\
+\textbf{GARCH(1, 1)} $\sigma^2_n = \gamma V_L + \alpha u_{n-1}^2 + \beta \sigma^2_{n-1}; \gamma, \alpha, \beta\geq 0; \gamma+ \alpha+ \beta=1$\\
+Take $V_L = \frac{\omega}{1-\alpha-\beta}, \sigma^2_n = \omega + \alpha u^2_{n-1} + \beta \sigma^2_{n-1}$, $\E [\sigma^2_{n+k}] =V_L + (\alpha+\beta)^k (\sigma^2_n - V_L) $\\
+EWMA is a special case when $\gamma=0, \alpha = (1-\lambda), \beta=\lambda$\\
+% \begin{flalign*}
+%     &\textbf{GARCH(p, q) } \sigma^2_n = \omega+ \sum^p_{i=1} \alpha_i u^2_{n-i} +\sum^q_{j=1} \beta_j \sigma^2_{n-j}, \omega=V_L , \gamma + \sum^p_{i=1} \alpha_i + \sum^q_{j=1} \beta_j = 1 &
+% \end{flalign*}
+\textbf{GARCH(p, q) } $\sigma^2_n = \omega+ \sum^p_{i=1} \alpha_i u^2_{n-i} +\sum^q_{j=1} \beta_j \sigma^2_{n-j}, \omega=V_L , \gamma + \sum^p_{i=1} \alpha_i + \sum^q_{j=1} \beta_j = 1$\\
+
+GARCH(1, 1) has mean reversion but EWMA has no mean reversion property\\
+\textbf{Vol Estimation for Option} $\sigma (T) :=\sqrt{252\left(V_L + \frac{1-e^{-aT}}{aT}( V(0) -V_L ) \right)}, a = \log \frac{1}{\alpha + \beta}, V(t) = \E [\sigma^2_{n+t}] $
+\\
+\textbf{Correlation} $\frac{\cov_n}{\sqrt{\var_{x, n} \var_{y, n}}}$, $\cov_n = \E [x_n y_n] - \E [x_n] \E [y_n]$\\
+EWMA: $\cov_n = \lambda \cov_{n-1} + (1-\lambda) x_{n-1} y_{n-1}\quad$
+GARCH(1, 1): $\cov_n = \omega + \alpha x_{n-1} y_{n-1} +\beta \cov_{n-1}$\\
+
+\textbf{Copulas} 1) $\Dom \mathbf{C} = [0, 1] \times [0, 1]$; 2) $\forall u \in [0, 1], \mathbf{C}(0, u) = \mathbf{C} (u, 0)=0$ and $\mathbf{C} (1, u) = \mathbf{C}(u, 1) = u$; \\3) $\mathbf{C}$ is 2-increasing: $\forall (u_1, u_2), (v_1, v_2) \in [0, 1]^2, s.t. 0\leq u_1\leq v_1 \leq 1, 0 \leq u_2 \leq v_2 \leq 1, \mathbf{C}(v_1, v_2) - \mathbf{C}(v_1, u_2) - \mathbf{C} (u_1, v_2) + \mathbf{C}(u_1, u_2) \geq 0$ \\
+$\Rightarrow\mathbf{C}$ is c.d.f with uniform marginal $\mathbf{C} (u_1, u_2) = \prob (U_1 \leq u_1, U_2 \leq u_2), U_1, U_2 \sim \mathcal{U}(0, 1)$\\
+\textbf{Product Copula} (independence copula) $\mathbf{C}^{\bot} (u_1, u_2) := u_1 \cdot u_2$ \\
+\textbf{Sklar's theorem} 1) Any bivariate cdf $F$ with marginal distributions $F_1, F_2$ admits a copula representation $F(x_1, x_2) = \mathbf{C} (F_1 (x_1), F_2 (x_2))$, $\mathbf{C}$ is unique if the marginals are continuous and $\mathbf{C} (x_1, x_2) = F(F^{-1}_1 (x_1), F^{-1}_2 (x_2))$;\\
+2) Let $F_1, F_2$ be two univariate distributions. $F(x_1, x_2) = \mathbf{C} (F_1 (x_1), F_2 (x_2))$ is cdf with marginals $F_1, F_2$\\
+\textbf{Concordance Ordering} $\mathbf{C}_1 \prec \mathbf{C}_2$ if $\forall (u_1, u_2) \in [0, 1], \mathbf{C}_1 (u_1, u_2) \leq \mathbf{C}_2 (u_1, u_2)$\\
+
+\textbf{Frechet Bounds} $\mathbf{C}^{-} \prec \mathbf{C} \prec \mathbf{C}^{+}, \mathbf{C}^{-} = \max \{u_1 +u_2 - 1, 0 \}, \mathbf{C}^{+} = \min\{u_1, u_2\}$\\
+
+Let $X = (X_1, X_2)$ be rand. vector with dist. $F$, we define copula of $(X_1, X_2)$ by copula of $F$: $F(x_1, x_2) = \mathbf{C} \langle X_1, X_2\rangle (F_1 (x_1), F_2 (x_2))$\\
+
+$X_1, X_2$ are \textbf{countermonotonic} ($\mathbf{C} \langle X_1, X_2 \rangle = \mathbf{C}^- $); \textbf{independent} ($\mathbf{C} \langle X_1, X_2 \rangle = \mathbf{C}^\bot$); \textbf{comonotonic} ($\mathbf{C} \langle X_1, X_2 \rangle = \mathbf{C}^+$)\\
+\textbf{Scale Invariance} if $h_1, h_2$ are increasing func., then $\mathbf{C} \langle X_1, X_2 \rangle = \mathbf{C} \langle h_1(X_1), h_2(X_2) \rangle$\\
+
+\textbf{Normal Copula} Normal Copula with corr. $\rho$ is $\mathbf{C} (u_1, u_2;\rho) = M (N^{-1} (u_1), N^{-1} (u_2);\rho ) $, where $M$ is bivariate c.d.f of normal dist. with $\rho$\\
+
+\textbf{Coherent Risk Measure} Subadditivity: $\R (L(w_1) + L(w_2)) \leq \R(L(w_1)) + \R(L(w_2))$; Homogeneity: $\R (\lambda L(w)) = \lambda \R (L(w))$ if $\lambda \geq 0$; Monotonicity: if $L(w_1)\leq L(w_2)$ then $\R(L(w_1))\leq \R (L(w_2)) $; Translation invariance: $\forall m \in \mathbb{R}, \R (L(w)+m) = \R(L(w)) +m$\\
+$L(w)$: loss of portfolio; $\R(L(w))$: risk meansure of portfolio $w$\\
+
+\textbf{Value at Risk} $\VaR_{\alpha} (L(w);h)$ the potential loss which the portfolio $w$ can suffer for a given confidence level $\alpha$ and a fixed holding period $h$: $\prob (L(w) \leq \VaR_{\alpha} (L(w);h)) = \alpha$\\
+Losses in the tail are not considered in the VaR\\
+
+\textbf{ES} $\ES_{\alpha}(L(W)) = \E [L(w) \lvert L(w) \geq \VaR_\alpha (L(w))]=\frac{1}{1-\alpha} \int^1_\alpha \VaR_u (L(w)) du = \frac{1}{1-\alpha} \int^{+\infty}_{F^{-1}_L (\alpha)} xf_L (x) dx $ 
+\\Expected loss given loss is greater than the VaR level
+\begin{flalign*}
+\begin{split}
+\text{If $L(w)$ is discrete,} \ES_{\alpha} (L(w), h) =& \frac{1}{1-\alpha} \left[\E [L(w) \mathds{1}_{(L(w) \geq \VaR_{\alpha} (L(w);h)} ]\right. \\
++  &\left.\VaR_{\alpha} (L(w), h)\left( \prob(L(w) \leq \VaR_{\alpha} (L(w);h)-\alpha\right) \vphantom{\mathds{1}_{(L(w) \geq \VaR_{\alpha}}}\right]
+\end{split}
+\end{flalign*}
+If $L(w)$ is cont., then $\ES_\alpha (L(w), h) = \E [L(w) \rvert L(w) \geq \VaR_{\alpha} (L(w);h)]$\\
+
+\textbf{Gaussian VaR} $\VaR_\alpha (L(w) ;h) = \mu (L) + \mathcal{N}^{-1} (\alpha)\sigma (L)$\\
+\textbf{Gaussian ES} $\ES_{\alpha} (L(w)) = \mu (L) + \frac{\phi (\mathcal{N}^{-1} (\alpha))}{1-\alpha} \sigma (L)$\\
+
+\textbf{Square-Root-of-Time Rule} $\VaR_{\alpha} (L(w);h) = \sqrt{h} \VaR_{\alpha} (L(w);1); \ES_{\alpha} (L(w); h) = \sqrt{h}\ES_{\alpha} (L(w); 1)$
+\begin{flalign*}
+    &\textbf{Euler Decomposition }\mathcal{R}(L(w)) = \sum^n_{i=1} w_i \frac{\partial \mathcal{R}(L(w))}{\partial w_i} = \sum^n_{i=1} \mathcal{RC}_i; \mathcal{RC}_i = w_i \frac{\partial \mathcal{R}(L(w))}{\partial w_i}&
+\end{flalign*}
+$\mathcal{RC}_i$ risk contribution of sub-portfolio $i$. This property is fulfilled by VaR and ES\\
+Let $\mu(L) = -w^T \cdot \mu, \sigma(L) = \sqrt{w^T \Sigma w}$, then Gaussian risk contribution is given as,\\
+\textbf{VaR} $\mathcal{RC}_i = w_i \left(-\mu_i + \mathcal{N}^{-1} (\alpha) \frac{(\Sigma w)_i}{\sqrt{w^T \Sigma w}} \right)\qquad$
+\textbf{ES} $\mathcal{RC}_i = w_i \left(-\mu_i +\frac{\phi (\mathcal{N}^{-1} (\alpha))}{(1-\alpha)} \frac{(\Sigma w)_i}{\sqrt{w^T \Sigma w}} \right)$＼＼
+
+\textbf{Historical Simulation Computation} Assumption: All considered losses $L_i, i =1, \dots, n$ are equally, important, i.e. $\prob (L = L_i) = \frac{1}{n}$\\
+Order scenarios from smallest to largest, i.e. $\prob (L \leq L_{(i)}) = \frac{i}{n}$. Denote $\alpha = \frac{k}{n}$ for $k \in \{1, \dots n\}$, then\\
+$\VaR_\alpha (L) = \inf \left\{ \mathscr{l}: \prob (L \leq \mathscr{l} )\geq \frac{k}{n} \right\}  = L_{(k)}$\\
+$\ES_\alpha (L) = \frac{1}{1-\alpha} \E \left[L \mathds{1}_{\{L > \VaR_\alpha (L)\}} \right]  = \frac{1}{1-\frac{k}{n}} \left(\sum^n_{i=k+1} \frac{1}{n} L_{(i)} \right) = \frac{1}{n-k} \left(\sum^n_{i=k+1} L_{(i)} \right)$\\
+
+\textbf{Standard Error of VaR} For loss distribution $F$ with pdf $f$,
+$\frac{1}{f(F^{-1} (\alpha)) } \sqrt{\frac{\alpha (1-\alpha)}{n}}$\\
+
+\textbf{Weight of Observations} Let weights assigned to observations decline exponentially as we go back in time. For some $\lambda \in [0, 1]$, we assign to scenario $i$ a weight of $\prob (L=L_i) = \frac{\lambda^{n-i} (1-\lambda)}{1-\lambda^n}$\\
+
+\textbf{Vol Updating Scheme} is used to monitor volatilities of all market variables\\
+If the current vol for a market variable is $b$ times the vol on Day $i$, multiply the percentage change observed on day $i$ by $b$
+\\
+\vspace{-5pt}
+\textbf{Vol Scheme with Vol Scaling} Value of market variable under $i$-th scenario: $\nu_n \frac{\nu_{i-1} + (\nu_i - \nu_{i-1} ) \frac{\sigma_{n+1}}{\sigma_i}}{\nu_{i-1}}$\\
+\vspace{-3pt}
+\textbf{Model-Building Approach} $\VaR_\alpha = \mathcal{N}^{-1}(\alpha)\sigma \sqrt{T} V, \ES_\alpha = \sigma \sqrt{T} \frac{\phi(\mathcal{N}^{-1}(\alpha))}{1-\alpha}V$, $\sigma_{X+Y} = \sqrt{\sigma_X^2 + \sigma_Y^2 + 2\rho \sigma_X \sigma_Y}$, where $V$ is the value of asset\\
+
+\textbf{Assumptions in Linear Model} 1) There are $n$ market variables $x_i, i = 1, \dots n$ to which we refer as risk factors; \\
+2) The daily change in value of a portfolio is linearly related to the daily returns from market variables:
+$\Delta P = \sum^n_{i=1} \delta_i \Delta x_i$, where $P$: value of portfolio, $\delta_i = \frac{\Delta P}{\Delta x_i}$  the delta w.r.t. risk factor $i$, $\Delta x_i$: the proportional change in the $i$-th risk factor;\\
+3) The returns from the market variables are normally distributed\\
+
+\textbf{Variance of Return on Portfolio} Let $\frac{\Delta P}{P}$ denote the portfolio return,
+\begin{align*}
+    \sigma_P^2 = \var \left(\frac{\Delta P}{P} \right) = \frac{1}{P^2} \var \left(\Delta P \right) = \frac{1}{p^2} \sum^n_{i=1} \sum^n_{j=1} \rho_{ij} \delta_i \delta_j \sigma_i \sigma_j = \sum^n_{i=1} \sum^n_{j=1} \rho_{ij} \omega_i \omega_j \sigma_i \sigma_j,
+\end{align*}
+where $\omega_i = \frac{\delta_i}{P}$ is weight of $i$-th asset in portfolio\\
+
+\textbf{Marginal Default Rate} $\PD_T (R)$ during year $T$ conditional on being solvent in $T-1$,
+\begin{align*}
+    \PD_T (R) = \prob (\text{default at time } T \lvert \text{solvent at time }T-1) = m_T (R) / n_T (R),
+\end{align*}
+where $m_T (R)$ denotes proportion of issuers in rating category $R$ at time $0$ that default in year $T$; $n_T(R)$ denotes remaining number at the beginning of year $T$\\
+
+\textbf{Survival Rate} Proportion of issuers initially rated $R$ that will not have defaulted by time $T$, $S_T (R) = \prod^T_{i=1} (1-\PD_T (R))$\\
+
+\textbf{Unconditional Marginal PD in year $T$} Proportion of issuers initially rated $R$ that defaulted in year $T$, relative to the initial number of issuers, $k_T (R) = S_{T-1} (R) \PD_T (R)$\\
+
+\textbf{Cumulative Default Rate} Proportion of issuers rated $R$ at time $0$ that defaulted until time $T$
+\begin{align*}
+    C_T (R) = k_1 (R) + \cdots + k_T(R) = 1 - S_T (R) = 1 - \prod^T_{i=1} (1- \PD_i (R)) = (1 - \PD (R))^T
+\end{align*}
+\textbf{Credit Risky Discount Factor} Let $V_t$ denote the value of a future risky cash flow $C(T)$ at $T$, then
+\begin{align*}
+    V_t := \exp \{-(r_t (T) + s_t (T)) (T-t) \} C(T),
+\end{align*}
+where $r_t (t)$ is risk-free interest rate, $s_t (T)$ is credit spread, 
+$\tilde{d}_t (T):= \exp \{-(r_t (T) + s_t (T)) (T-t) \}$ is credit risky discount factor
+
+\textbf{Risk Premium} Difference between a bond's market-implied and objective default rate\\
+\textbf{Credit Exposure} Cost of replacing a financial instrument at time of default, $\mathrm{Exposure}_t = \max \{V_t, 0 \}$\\
+\textbf{Exposure at Default (EAD)} Credit exposure at default time, can be split into \textbf{outstanding} (exposeure already drawn by the obligor), \textbf{commitments} (exposure the bank has promised to lend to the obligor at  her or his request), $\mathrm{EAD} = \mathrm{Outst.} + \gamma \mathrm{Comm.}$
+\\
+
+\textbf{Expected Credit Exposure} Expected value of asset replacement value, if possible, on target date $T$
+$\mathrm{ECE} = \int^{+\infty}_{-\infty} \max \{x, 0 \} f_T (x) dx = \E [\max \{V_T, 0 \}]$, where $f_T (x)$ is pdf of asset's value on $T$\\
+
+\textbf{Worst Credit Exposure} Worst exposure at some confidence level $\alpha$ and is defined implicitly as the value that is not exceed at this confidence level, $\mathrm{WCE} = \inf \left\{z \in \mathbb{R}: \prob (\max \{V_T, 0 \} >z) \leq 1-\alpha \right\}$, for cont. distributed asset value $V_T$ with pdf $f_T$, 
+\begin{align*}
+    1 - \alpha = \int^{+\infty}_{\mathrm{WCE}} f_T (x) dx  \quad \Leftrightarrow \quad \alpha = \int^{\mathrm{WCE}}_{-\infty} f_T (x) dx = \prob \left(\max \{V_T, 0 \} \leq \mathrm{WCE} \right)
+\end{align*}
+\textbf{Recovery Rates} Fraction of exposure to an obligor which can be recovered in case of default\\
+
+\textbf{Loss Given Default} Portion of loss the bank suffers in the default event $\mathrm{LGD} = 1 - R$\\
+
+\textbf{Loss Variable} Consider a portfolio with $N$ loans indexed by $n = 1, \dots, N$. Loss variable for individual obligor $L_n = \EAD_n \cdot \LGD_n \cdot D_n$, where $D_n \in \{0, 1\}$ indicates default event for obligor $n$ in a certain time period\\
+\textbf{Portfolio Loss} $L = \sum^N_{n=1} L_n = \sum^N_{n=1}  \EAD_n \cdot \LGD_n \cdot D_n$\\
+
+\textbf{Expected Loss} Describes average level of credit loss a bank can expect to experience in a given time period. $\mathrm{EL}_n = \E [L_n] =  \EAD_n \cdot \mathrm{ELGD}_n \cdot \PD,\quad \mathrm{ELGD}_n = \E [\LGD_n]$\\
+
+\textbf{Expected Portfolio Loss} $\mathrm{EL} = \sum^N_{n=1} \mathrm{EL}_n = \sum^N_{n=1} \EAD_n \cdot \mathrm{ELGD}_n \cdot \PD $\\
+
+\textbf{Unexpected Loss} $\mathrm{UL}_n = \sqrt{\var (L_n)} = \sqrt{\var (\EAD_n \cdot \LGD_n \cdot D_n)}$\\
+If $D_n$ and $\LGD$ are independent, $\EAD$ is const., $\mathrm{UL}_n = \EAD_n \sqrt{\mathrm{VLGD}_n^2 \cdot \PD_n + \mathrm{ELGD}^2_n \cdot \PD_n (1-\PD_n)}$, as $\var (D_n) = \PD_n (1-\PD_n)$\\
+
+$\mathrm{UL} = \sqrt{\var (L)} = \sqrt{\sum^N_{n=1} \sum^N_{k=1} \cov (L_n, L_k) }$, $\cov (L_n, L_k) = \EAD_n \EAD_k \cov(\LGD_n D_n, \LGD_k, D_k)$\\
+If $LGD$ is constant, $\mathrm{UL}^2 = \sum^N_{n, k=1} \EAD_n \EAD_k \LGD_n \LGD_k \rho_{n, k} \sqrt{\PD_n (1-\PD_n) \PD_k (1-\PD_k)}$, where $\rho_{n, k} \equiv \corr (D_n, D_k), \cov(D_n, D_k) = \rho_{n, k} \sqrt{\var (D_n)} \sqrt{\var (D_k)} = \rho_{n, k} \sqrt{\PD_n (1-\PD_n) \PD_k (1-\PD_k)}$\\
+
+\textbf{Credit Value-at-Risk} Loss which will not be exceeded in excess of expected loss with some confidence level in a certain time period $\CVaR = \VaR - \EL$\\
+
+\textbf{Why subtracting EL from VaR} Decomposition of \textbf{Total Risk Capital} ($\VaR$) into a part for expected losses (measured by \textbf{Capital Reserves}, $\EL$) and a part reserved for losses (measured by \textbf{Economic Capital}, $\mathrm{EC}_\alpha$), i.e. Total Risk Capital = Capital Reserves + Economic Capital\\
+
+\textbf{Merton Model}\\
+\textbf{Scenario at Maturity} Assume $V_t = S_t + B_t$, $V_T \leq B \Rightarrow$ default, $B_T = V_T \& S_T = 0$; no default otherwise\\
+
+\textbf{Equity and Debt Value} $S_T = \max \{V_T - B, 0 \} = (V_T - B)^+, B_T = \min \{V_T, B\} = B - (B - V_T)^+$\\
+
+\textbf{Asset Value Process} $d V_t = \mu_V V_t dt + \sigma_V V_t d W_t \Rightarrow V_T = V_0 \exp \left\{ \left(\mu_V - \frac{1}{2} \sigma^2_V \right)T + \sigma_V W_T \right\}$, implies $\log V_T \sim \mathcal{N} \left(\log V_0 + \left(\mu_V - \frac{1}{2} \sigma^2_V \right)T, \sigma^2_V T \right)$\\
+
+\textbf{Pricing Equity} $S_t = \E^{\mathbb{Q}}\left[e^{-r (T-t)} \left(V_T - B \right)^+ \lvert \mathcal{F}_t \right] = V_t \mathcal{N} (d_{t, 1}) - e^{-r (T-t)} B \mathcal{N} (d_{t, 2})$,\\
+where $d_{t, 1} = \frac{\log (V_t / B) + (r+ \sigma^2_V / 2) (T-t) }{\sigma_V \sqrt{T-t}}, d_{t, 2} = d_{t, 1} - \sigma_V \sqrt{T-t}$\\
+
+\textbf{Debt Value} $B_t = \E^{\mathbb{Q}} \left[e^{-r(T-t)} (B - (B - V_T)^+) \lvert \mathcal{F}_t \right] = B e^{-r(T-t)} - \left(Be^{-r(T-t)} \mathcal{N} (-d_{t, 2}) - V_t \mathcal{N} (-d_{t, 1}) \right)$\\
+$\Rightarrow B_t = B e^{-r(T-t)} \mathcal{N} (d_{t, 2}) + V_t \mathcal{N} (-d_{t, 1})$
+\begin{flalign*}
+    \textbf{Default Probability} &\prob (V_T \leq B) = \mathcal{N} \left( \left(\log (B / V_0) -(\mu_V - \frac{1}{2} \sigma^2_V)T \right)\left(\sigma_V \sqrt{T}\right)^{-1} \right)&\\
+    &\mathbb{Q} (V_T \leq B) = \mathbb{Q} \left(\left(\log (V_T / V_0) - (r - \frac{1}{2} \sigma^2_V) T \right) \left(\sigma_V \sqrt{T}\right)^{-1} \leq -d_{0, 2} \right) = 1 - \mathcal{N} (d_{0, 2}) &
+\end{flalign*}
+\textbf{Credit Spread} Let $s$ denote cont. compounded credit spread, then $B_t = e^{- (r+s) (T-t) } B$, thus, 
+\begin{align*}
+     B e^{-r(T-t)} \mathcal{N} (d_{t, 2}) + V_t \mathcal{N} (-d_{t, 1}) = e^{- (r+s) (T-t) } B \quad
+    \Rightarrow s = -\frac{1}{T-t} \log \left(\mathcal{N} (d_{t, 2} ) + \frac{V_t}{B_t} e^{r(T-t)} \mathcal{N} (-d_{t, 1}) \right)
+\end{align*}
+Spread tend to zero in Merton's model as $\mathcal{N} (-d_{t, 2}) \to 0$ as $T \to \infty$\\
+
+\textbf{Asset Vol} Suppose equity value follows GBM, then It\^{o}'s Lemma implies,
+\begin{align*}
+    dS_t = \left( \frac{\dd S}{\dd t} + \frac{\dd S}{\dd V} V_t \mu_V + \frac{1}{2} \sigma_V^2 V^2_t \frac{\dd^2 S}{\dd V^2} \right) dt + \frac{\dd S}{\dd V} \sigma_V V_t d W_t = S_t \mu_S dt + S_t \sigma_S d W_t \Rightarrow\sigma_S S_t = \frac{\dd S}{\dd V} \sigma_V V_t
+\end{align*}
+Substitute BS option Delta $\Delta = \frac{\dd S}{\dd V} = \mathcal{N} (d_{t, 1}) \Rightarrow \sigma_S S_t = \sigma_V V_t \mathcal{N} (d_{t, 1}) \Rightarrow \sigma_V = \sigma_S \frac{S_0}{V_0 \mathcal{N} (d_{0, 1}) }$\\
+
+\textbf{Hull, Nelken, White Approach} Assumptions: 1) current stock price of a publicly traded company can be observed from exchange data; 2) market prices $\Psi_j$ of at least two put options on the firm's stock price with strikes $K_j$ and maturities $T_j < T$ for $j \in \{1, 2 \}$ are available\\
+Then price of call on $V$ ($S_0$) and price of put on $S$ ($\Psi_j$) are given as follows,
+\begin{align*}
+    S_0 = V_0 \mathcal{N} (d_{0, 1}) - B e^{-rT} \mathcal{N} (d_{0, 2});\quad \Psi_j - \E^{\mathbb{Q}} \left[e^{-rT_j} (K_j 
+- S_{T_j})^+ \right], j \in \{1, 2 \}
+\end{align*}
+\begin{flalign*}
+    &\textbf{Geske} \quad \operatorname{Put} (0,T_0) = B e^{-rT} \N_2 \left(-b_2, d_2; -\sqrt{\frac{T_0}{T}} \right) - V_0\N_2 \left(-b_1, d_1; -\sqrt{\frac{T_0}{T}} \right) + Ke^{-rT} \N (-b_2)&\\
+    &\text{with } d_j = \frac{\log \left(\frac{V_0}{B} \right) + \left( r+ \frac{(-1)^{j+1)}}{2} \sigma^2_V \right)T }{\sigma_V \sqrt{T}}, b_j = \frac{\log \left(\frac{V_0}{V^*_{T_0}} \right) + \left( r+ \frac{(-1)^{j+1)}}{2} \sigma^2_V \right)T_0 }{\sigma_V \sqrt{T_0}}
+\end{flalign*}
+$V^*_{T_0}$ is the critical asset value at $T_0$ for which the equity value at $T_0$ equals $K$, thus,
+\begin{align*}
+    K =  V^*_{T_0} \N (d^*_1) - Be^{-r(T-T_0)} \N (d^*_2); d^*_j = \left[\log \left(\frac{V^*_{T_0}}{B} \right) + \left( r + \frac{(-1)^{j+1}}{2} \sigma^2_V \right) (T-T_0) \right] \left( \sigma_V \sqrt{T - T_0} \right)^{-1}
+\end{align*}
+\textbf{Expected Loss} Present value of $\EL$ is value of risk-free bond minus risky bond
+\begin{align*}
+    &e^{-r(T-t)} \EL = Be^{-r(T-t)} - B e^{-r (T-t)} \N (d_{t, 2}) - V_t \N (-d_{t, 1}) = Be^{-r (T-t)} \N (- d_{t, 2}) - V_t \N (-d_{t, 1})\\
+    &\EL = B - \E^{\Q} [B \mathds{1}_{\{ \text{no def.} \}} + (1 - \LGD) B \mathds{1}_{\{ \text{def.} \}}] = B - \E^{\Q} [B (1-\mathds{1}_{\{ \text{def.} \}}) + (1 - \LGD) B \mathds{1}_{\{ \text{def.} \}}]
+\end{align*}
+Thus, $\EL = \E^{\Q}[\LGD \cdot B \cdot\mathds{1}_{\{\text{def.} \}}] =\LGD  \cdot\PD \cdot\EAD $\\
+
+\textbf{KMV Model} Computes \textbf{Expected Default Frequencies (EDF)} based on firm's capital structure, vol of asset, current asset value\\
+\textbf{Distance to Default} $\mathrm{DD} = \frac{V_0 - \tilde{B}}{\sigma_V V_0}$\\
+Approximation of $PD_{Merton}$: $\log V_0 - \log \tilde{B} \approx \log V_0 - \left(\log V_0 + \frac{1}{V_0} (\tilde{B} - V_0) \right) = (V_0 - \tilde{B}) / V_0$\\
+$\PD_{Merton} = 1 - \N (d_{0, 2}) = F(\mathrm{DD}) = \mathrm{EDF}, F \approx 1 - \N (\cdot)$\\
+
+\textbf{Intensity Based Models} Let $\tau \geq 0$ denotes default time, $(D_t)_{t\geq 0}$ be associated default indicator process, $D_t := \mathds{1}_{\{\tau \leq t \}}$\\
+
+$F(t) = \Q (\tau \leq t)$ denote distribution func. of $\tau$, with its density $f(t) = F^\prime (t)$, survival func. $\bar{F} (t) = 1 - F(t)$.\\
+\textbf{Cumulative Hazard Func.} $\Gamma (t) := - \log (\Bar{F} (t))\qquad$
+\textbf{Hazard Rate} $\gamma (t) := \frac{f(t)}{ 1 - F(t)}$
+\begin{align*}
+    \lim_{\Delta t\downarrow 0} \frac{1}{\Delta t} \Q (\tau \leq t + \Delta t \lvert \tau > t) &= \lim_{\Delta t\downarrow 0}\frac{1}{\Delta t} \frac{\Q (t < \tau  \leq t + \Delta t)}{\Q (\tau > t)} = \lim_{\Delta t\downarrow 0}\frac{1}{\Delta t} \frac{F (t+\Delta t) - F(t)}{\bar{F} (t)} \\
+    &=\frac{1}{\bar{F}(t)} \lim_{\Delta t\downarrow 0}\frac{1}{\Delta t} \frac{F (t+\Delta t) - F(t)}{\Delta t} = \frac{f(t)}{\bar{F} (t)} = \gamma (t)
+\end{align*}
+Thus $\gamma (t) \Delta t$ is approximately the conditional probability of default in $(t, t +\Delta t]$\\
+
+\textbf{Homogeneous Poisson Process} Properties: 1) $\prob (N_t = k) = e^{-\lambda t} \frac{(\lambda t)^k}{k!} $; 2) $\forall s\leq t, N_{t+u} - N_t$ independent of $N_s$, and Poisson-distributed with parameter $\lambda u$; 3) \textbf{Compensated Poisson process} $M_t := N_t - \lambda t$ is a martingale, $\E [N_t] = \lambda t$\\
+
+\textbf{Inhomogeneous Poisson Process} For deterministic intensity func. $\lambda (t)$, for independent $N(t) - N(s)$ and $s<t$, $\prob [N(t) - N (s) = k] = \frac{1}{k!} \left(\int^t_s \lambda (u) du \right)^k \exp \left\{-\int^t_s \lambda(u) du \right\}$\\
+
+\textbf{Poisson Default Arrival} Default time can be viewed as first jump time of a Poisson process $N$, i.e. $\tau = \inf \{t \geq 0 : N(t) = 1 \}$\\
+For homo. Poisson process $\tau$, $F (t) = \Q (\tau \leq t) = 1- \Q (N(t) = 0) = 1 - e^{-\lambda t}$\\
+
+\textbf{Time Dependent-Intensities} Survival prob. $\bar{F} (t) = 1 - F(t) = \Q (\tau > t) = \Q (N_t = 0) = \exp \left\{-\int^t_0 \gamma (u) du \right\} $\\
+
+\textbf{ZCB} $B_d (0, T) = \E^{\Q} \left[\exp \left\{-\int^T_0 r(s) ds \right\} \mathds{1}_{\{ \tau >T \}} \right] = \exp \left\{-\int^T_0 r(s) ds \right\} \Q (\tau >T) = \exp \left\{-\int^T_0 r(s) + \gamma(s) ds \right\} $\\
+\textbf{ZCB with Non-Zero Recovery } 
+\begin{flalign*}
+    B_d (0, T) &=  \E^{\Q} \left[\exp \left\{-\int^T_0 r(s) ds \right\} \left( \mathds{1}_{\{ \tau >T \}} + R\mathds{1}_{\{ 0 < \tau \leq T \}} \right) \right] = \exp \left\{-\int^T_0 r(s) ds \right\} \left(\Q (\tau>T) + R(1- \Q (\tau > T) \right)\\
+    &=\exp \left\{-\int^T_0 r(s) + \gamma(s) ds \right\} + R \exp \left\{-\int^T_0 r(s) ds \right\} \left(1- \exp \left\{-\int^T_0 \gamma (s) ds \right\} \right)
+\end{flalign*}
+\textbf{Credit Spread} $S(T) = \frac{1}{T} \log \left(\frac{B(0, T)}{B_d (0, T)} \right) = \frac{1}{T} \log \left(\exp (\gamma T) \right) = \gamma $ \\
+
+\textbf{General Hazard Rate Model} Define $\tau = \inf \left\{t: \int^t_0 \gamma (X_s) ds \geq \eta \right\}$, $\eta$ distributed exponentially with mean one and independent of $\mathcal{G}$, $\Q (\tau \leq 1) = 1 - \E^{\Q} \left[ \exp \left\{-\int^t_0 \gamma(X_s) ds \right\} \right] $, since,
+\begin{align*}
+    &\Q(\tau > t \lvert \mathcal{G}_t) = \Q \left(\inf \left. \left\{u: \int^u_0 \gamma (X_s) ds \geq \eta \right\}  t \right\rvert \mathcal{G}_t \right) = \Q \left(\left. \int^t_0 \gamma (X_s) ds <\eta \right\rvert \mathcal{G}_t \right) \\
+    =& 1 - \Q \left(\left. \eta \leq \int^t_0 \gamma (X_s) ds \right\rvert \mathcal{G}_t \right) = 1 - \left(1- \exp \left\{-\int^t_0 \gamma (X_s) ds \right\} \right) = \exp \left\{-\int^t_0 \gamma (X_s) ds \right\}
+\end{align*}
+\textbf{Single Factor Merton Model}\\
+\textbf{Default Indicator} $D_n = \mathds{1}_{F} \sim \mathrm{Bern} (1; \prob (F)), F = \{V^n_T < C_n \}$, $V^n_t$ is asset value of $n$; $C_n$ is default threshold for $n$, obligor $n$ defaults if $V^n_T < C_n$\\
+
+\textbf{Assumption} 1) Asset return $r_n = \log (V^n_T / V^n_0)$ depend linearly on a single systematic risk factor $X \sim \N (0, 1)$, and an idiosyncratic term $\epsilon_n \N (0, 1)$; 2) $X, \epsilon_n, \epsilon_m$ are independent for $n \neq m$\\
+\textbf{Factor Rep.} $r_n = \rho_n X + \sqrt{1 - \rho_n^2} \epsilon_n \sim \N (0, 1), \quad$ $\rho_n$: borrower $n$'s sensitivity to systematic risk\\
+$\Rightarrow \var (r_n) = \rho^2_n \var (X ) + (1\rho^2_n)\var (\epsilon_n) = 1$\\
+\textbf{Default Prob.} $\PD_n = \prob (r_n < c_n) \Rightarrow c_n = \N^{-1} (PD_n) \Rightarrow \epsilon_n = \frac{\N^{-1} (\PD_n) - \rho_n X }{\sqrt{1-\rho^2_n}}$, thus the one year default probability of obligor $N$ conditional on $X$ is $\PD_n (X) = \N \left(\epsilon_n \right)$\\
+
+\textbf{Loss Distribution} $\mathscr{l} = \sum^N_{n=1} s_n \LGD_n \mathds{1}_{\{r_n \leq \N^{-1} (\PD_n) \}}, s_n = \EAD_n / \sum^N_{i=1} \EAD_i $: $n$'s exposure share\\
+$\Rightarrow \E [\mathscr{l} \lvert X] = \sum^N_{n=1}  s_n \cdot\mathrm{ELGD}_n \cdot\prob (r_n \leq \N^{-1} (\PD_n) \lvert X ) = \sum^N_{n=1} s_n \cdot\mathrm{ELGD}_n \cdot\PD_n (X) $\\
+With $d_n = \{0, 1\}, \prob (D_n = d_n \lvert X=x) = \PD_n (x)^{d_n} (1- \PD_n (x))^{1-d_n} $\\
+$\Rightarrow \prob (D_1 = d_1, \dots, D_N = d_N) =\int_{-\infty}^{+\infty} \prod^N_{n=1} \PD_n (x)^{d_n} (1- \PD_n (x))^{1-d_n} (2\pi)^{-\frac{1}{2}} \exp \left\{-\frac{x^2}{2} \right\} dx $,
+$\prob (\mathscr{l} \leq x) = \sum_{(d_1, \dots d_N) \in \{0, 1 \}^N: \mathscr{l}\leq x }\prob (D_1 = d_1, \dots, D_N = d_N) $\\
+
+\textbf{Infinitely Granular Portfolio} Assumption: 1) $\sum^N_{n=1} \EAD_n \to \infty $ as $N \to \infty$; 2) $\sum^{\infty}_{n=1} s^2_n < \infty $\\
+Under assumption above, $\mathscr{l}_N - \E [\mathscr{l}\lvert X] \to 0 $ almost surely as $N \to \infty$, i.e. $\prob \left(\lim_{N\to\infty} (\mathscr{l}_N - \E [\mathscr{l}_N \lvert X]) = 0 \right) = 1$, which states in the limit portfolio is driven solely by systemic risk\\
+The limiting portfolio is called \textbf{infinitely fine-grained} or \textbf{asymptotic portfolio}\\
+
+\textbf{Asymptotic Single Factor Model} Assume dependence across exposure is driven by single systematic risk factor $X$\\
+$\prob (\mathscr{l}_N \leq \E [\mathscr{l}_N \lvert \alpha_{1-q} (X) ]) \to q $ and $\lvert \alpha_q (\mathscr{l}_N) - \alpha_q ( E [\mathscr{l}_N \lvert X  ]) \rvert = \lvert \alpha_q (\mathscr{l}_N ) - \E [\mathscr{l}_N \lvert \alpha_{1-q} (X) ] \rvert \to 0  $ as $N \to \infty$\\
+
+\textbf{Conditional PD} $\PD_n (\alpha_{1-q} (X) ) =\N \left(\frac{\N^{-1} (\PD_n) + \sqrt{\rho_n} \N^{-1} (q) }{\sqrt{1-\rho_n}} \right) $, $\alpha_{1-q} (X) = \N^{-1} (1-q) = -\N^{-1} (q) $\\
+\textbf{Basel II Asset Corr.} $\rho_n = 0.12 \frac{1 - \exp \{-50\PD_n \} }{1 - \exp (-50) } +0.24 \left(1- \frac{1 - \exp \{-50\PD_n \} }{1 - \exp (-50) } \right) $
+\begin{flalign*}
+    &\alpha_q (L) = \alpha_q (\E [L\lvert X]) = \E [L \lvert \alpha_{1-q} (X) ] = \sum^N_{n=1} \EAD_n \E [\LGD_n D_n \lvert \alpha_{1-q} (X)] = \sum^N_{n=1} \EAD_n \LGD_n \PD_n (\alpha_{1-q}(X) ) &
+\end{flalign*}
+\textbf{Expected Loss} EL of obligor $n$: $\EL_n = \E [\EAD_n \cdot \LGD_n \cdot D_n] = \PD_n \cdot \EAD_n \cdot \LGD_n $\\
+\textbf{Risk Weighted Asset in IRB Approach}
+$\mathrm{RWA}_n = 12.5\mathrm{MA}_n  \cdot \EAD_n \left( \LGD_n \cdot \N \left( \frac{\N^{-1} (\PD_n) +\sqrt{\rho_n} \N^{-1} (q) }{\sqrt{1-\rho_n}} \right) - \LGD_n \cdot \PD_n  \right)$\\
+
+\textbf{Maturity Adjustment} $\mathrm{MA}_n = \frac{1 + (M_n - 2.5) b(\PD_n)}{1 - 1.5 b (\PD_n)}, b(\PD_n) = (0.11852 - 0.05478\log (\PD_n))^2 $\\
+
+\textbf{Credit Risk Capital Requirement} $\mathcal{K}_{CR} =0.08 \sum^N_{n=1} \mathrm{RWA}_n $\\
+
+\textbf{Large Homogeneous Portfolio} Suppose all obligors in portfolio have same $\PD$ and $\LGD = 100\%$, then $\rho$ is const. $\Rightarrow \mathscr{l}_N \to \E [\mathscr{l}_N \lvert X] = \sum^N_{n=1} s_n \E [D_n \lvert X] = \PD (X) = \N \left((\N^{-1} (PD) -\sqrt{\rho}X ) / \sqrt{1-\rho} \right) $\\
+
+\textbf{Loss Dist.} $F_{\mathscr{l}} (x) = \prob (\mathscr{l}\leq x ) = \prob (\PD (X) \leq x) = \prob \left(-X \leq \frac{1}{\sqrt{\rho}} (\sqrt{1-\rho} \N^{-1} (x) - \N^{-1} (\PD) )  \right)$\\
+$\Rightarrow F_{\mathscr{l}} (x) = \N \left( \frac{1}{\sqrt{\rho}} (\sqrt{1-\rho} \N^{-1} (x) - \N^{-1} (\PD) ) \right) $ for $x \in [0, 1]$\\
+$f_{\mathscr{l}} (x) = F_{\mathscr{l}}^{\prime} (x) = \sqrt{\frac{1-\rho}{rho}} \exp \left\{-\frac{1}{2\rho} \left( \sqrt{1-\rho} \N^{-1} (x) -\N^{-1} (\PD) \right)^2 \right\} \exp \left\{\frac{1}{2} \left(\N^{-1} (x) \right)^2 \right\} $\\
+
+\textbf{Basic Indicator Approach (BI)} Banks must hold capital for operational risk equal to average over the previous three years of a fixed percentage ($\alpha$) of positive gross income (GI), i.e. $\mathcal{K}^{\mathrm{BI}}_{\mathrm{OR}} =\frac{1}{Z_t} \sum^3_{i=1} \alpha \max \{\mathrm{GI}^{t-i}, 0 \}, Z_t = \sum^3_{i=1} \mathds{1}_{\{ \mathrm{GI}^{t-i} >0  \}} $, Basel Committee suggests $\alpha = 15\%$\\
+
+\textbf{Standardised Approach (SA-OR)} Corporate finance ($\beta_1 = 18\%$); Trading and sales ($\beta_2 = 18\%$); Retail banking ($\beta_3 = 12\%$); Commercial banking ($\beta_4 = 15\%$); Payment and settlement ($\beta_5 = 18\%$); Agency services ($\beta_6 = 15\%$); Asset management ($\beta_7 = 12\%$); Retail brokerage ($\beta_8 = 12\%$)\\
+$\mathcal{K}^{\mathrm{SA}}_{\mathrm{OR}} =\frac{1}{3} \sum^3_{i=1} \max \left\{ \sum^8_{j=1}  \beta_j \mathrm{GI}^{t-i}_{j}, 0 \right\} $\\
+
+\textbf{Advanced Measurement Approach (AMA)} Let $L^{t-i, b} = \sum^7_{\mathscr{l}=1} \sum^{N^{t-i, b, \mathscr{l} } }_{k=1} X^{t-i, b, \mathscr{l}}_{k} $, where $X^{t-i, b, \mathscr{l}}_{k}$ is $k$-th loss of type $\mathscr{l}$ for business line $b$ in year $t-i$; $L^{t-i} =\sum^8_{b=1} L^{t-i, b} $\\
+$\mathcal{K}^{\mathrm{AMA}}_{\mathrm{OR}} = \sum^8_{b=1} \var_{0.999} (L^{t, b}) $\\
+Main Criticism: Limited availability of data / high confi. levels of uncertainty / instability in estimates\\
+
+\textbf{Power Law} $X$ follows power-law if for some $K, \alpha$, $\prob (X>x) = K x^{-\alpha}$\\
+
+\textbf{Business Indicator Component (BIC)} $\mathrm{BIC} = 12\% \min \{\mathrm{BI}, \mathrm{EUR} 1bn \} + 15\% (\min \{\mathrm{BI}, \mathrm{EUR} 30bn \} - \mathrm{EUR} 1bn)^+ + 18\% (BI - \mathrm{EUR} 30bn)^+$\\
+\textbf{Internal Loss Multiplier} $\mathrm{ILM} = \log \left(e^1 - 1 + \left(\frac{15 \bar{L}}{\mathrm{BIC}} \right)^{0.8} \right) \geq \log (e^1-1)\approx 0.5 $, $\bar{L}$ is average annual operational risk losses over the last $10$ years\\
+\textbf{Standardized Measurement Approach (SMA)} $\mathcal{K}^{\mathrm{SMA}}_{\mathrm{OR}} = \mathrm{ILM} \cdot \mathrm{BIC}$\\
+
+\textbf{Dollar bid-ask Spread} $p:= \text{ask price} - \text{bid price}$\\
+\textbf{Proportional bid-as Spread} $s:= \frac{\text{ask price} - \text{bid price}}{(\text{ask price} + \text{bid price}) / 2 } = \frac{p}{\text{mid market price}}$\\
+
+\textbf{Cost of Liquidation in Normal Market} $\sum^n_{i=1} s_i \alpha_1 / 2 $, $n$ is number of positions, $\alpha_i$ is position in $i$-th instrument, $s_i$ is proportional bid-ask spread for $i$-th instrument\\
+
+\textbf{Cost of Liquidation in Stressed Market} $\sum^n_{i=1}(\mu_i + \lambda \sigma_i) \alpha_i / 2$, $\mu_i, \sigma_i$ are mean and sd of proportional bid-ask spread, $\lambda$ corresponds to required confidence level, e.g. $\lambda = \N^{-1} (0.99) \approx 2.326$\\
+
+\textbf{Liquidity Adj. VaR} $\VaR + \sum^n_{i=1} s_i \alpha_1 / 2 \quad$ \textbf{Liquidity Adj. Stressed VaR} $\VaR + \sum^n_{i=1}(\mu_i + \lambda \sigma_i) \alpha_i / 2$\\
+
+\textbf{Optimal Position} $\text{minimise } \lambda \sqrt{\sum^n_{i=1} \sigma^2 x^2_i} + \sum^n_{i=1} \frac{1}{2} q_i p (q_i), \text{subject to } \sum^n_{i=1} q_i = V $, where $p(q_1)$ is dollar bid-ask spread as a function of units traded, $\sigma$ is sd of mid-market price changes per day, $q_i$ is number of units traded on day $i$,  $x_i$ is amount held on day $i$, $x_i = x_{i-1} - q_i$, $V$ is amount that should be sold\\
+
+\textbf{Liquidity Coverage Ratio} $\frac{\text{High Quality Liquid Asset}}{\text{Net Cash Outflows for 30 days period}} \geq 100\%$\\
+
+\textbf{Net Stable Funding Ratio} $\frac{\text{Amount of Stable Funding}}{ \text{Required Amount of Stable Funding }} \geq 100\%$\\
+
+\textbf{Model Risk} Potential for adverse consequences from decisions based on incorrect or misused model outputs and reports\\
+
+\textbf{Systemic Risk} Failure by a large bank will lead to a failure by other large banks and a collapse of the financial system\\
+
+\textbf{History of Bank Regulation}\\
+\underline{Pre-1988} 1) Regulated using balance sheet measures such as ratio of capital to assets; 2) Definitions and required ratios varied from country to country; 3) Enforcement of regulations varied from country to country; 4) Off-balance sheet derivatives trading increased\\
+
+\underline{Basel I (1988)} Tier 1 Capital (primary funding source of the bank) : Equity, Retained earnings; Tier 2 Capital: Cumulative preferred stock, Certain types of 99-year debentures, Subordinated debt with an original life of more than 5 years\\
+$\text{Cooke Ratio} = \frac{\mathcal{K}}{\mathrm{RWA}} = \frac{\mathrm{Capital}}{\mathrm{RWA}} \geq 8\% \quad$ Risk-Weighted Asset $\mathrm{RWA} = \mathrm{EAD}\cdot \mathrm{RW}$\\
+\textbf{Categories of Risk Weight} $\mathrm{RW}=0\%$ (cash, gold, claims on OECD governments and central banks, claims on governments and central banks outside OECD and denominated in the national currency); $\mathrm{RW}=20\%$ (claims on all banks with a residual maturity lower than one year, longer-term claims on OECD incorporated banks, claims on public-sector entities within the OECD); $\mathrm{RW}=50\%$ (loans secured on residential property), $\mathrm{RW}=100\%$ others\\
+
+\textbf{Credit Equivalent Amount} $C = \max \{V, 0 \} + aL$, where $V$ is current value of the derivative, $a$ is add on factor, $L$ is principal amount.\\
+
+$\mathrm{RWA} = \sum^N_{i=1} \mathrm{RW}_i \cdot \EAD_i + \sum^N_{j=N+1} \mathrm{RW}_j \cdot C_j $ \\
+
+\textbf{Netting} Clause in ISDA master agreements, states that all OTC derivatives with a counterparty are treated as a single transaction in the event of a default.\\
+Exposure without netting $\sum^N_{j=1} \max \{V_j, 0 \} \quad$ Exposure with netting $\max \left\{\sum^N_{j=1} V_j, 0  \right\}$\\
+
+\textbf{Net Replacement Ratio} $\mathrm{NRR} =\frac{\text{Exposure with Netting}}{\text{Exposure without Netting}} = \max \left\{\sum^N_{j=1} V_j, 0  \right\} / \left( \sum^N_{j=1} \max \{V_j, 0 \} \right) $\\
+Credit equivalent amount is modified to $\max \left\{\sum^N_{j=1} V_j, 0  \right\} + \sum^N_{j=1} a_j L_j (0.4+0.6\mathrm{NRR}) $\\
+
+\textbf{1996 Amendment} Requires banks to hold capital for market risk for all instruments in the trading book including those off balance sheet\\
+
+In \textbf{Internal Model-based Approach (IMA)}, $\mathcal{K}_{\mathrm{MR}} = \max \left\{\VaR_{t-1} , (3+\xi) \VaR_{\mathrm{avg}}\right\} +\mathrm{SRC} $, $\xi$ is penalty coefficient chosen by regulators, $\VaR$ is $99\%$ 10-day VaR, SRC is specific risk charge for idiosyncratic risk related to specific companies, $\VaR_{t-1}$ is most recently calculated VaR, $\VaR_{\mathrm{avg}} = \frac{1}{60} \sum^{60}_{i=1} \VaR_{t-i}  $ is average VaR over the last $60$ days\\
+
+Cooke Ratio becomes $\frac{\mathcal{K}}{\mathrm{RWA}+12.5 \mathcal{K}_{\mathrm{MR}} } \geq 8\% \Rightarrow \mathcal{K} \geq 8\% \mathrm{RWA} + \mathcal{K}_{\mathrm{MR}} $, $8\% \mathrm{RWA}$ can be interpreted as the credit risk capital requirement $\mathcal{K}_{\mathrm{CR}}$\\
+
+\textbf{Basel II} \\
+\underline{New Capital Requirement} $\mathcal{K} = 0.08 (\text{Credit Risk RWA} + \text{Market Risk RWA} + \text{Operational Risk RWA})$\\
+
+\underline{IRB Approach}: 
+\textbf{Worst Case Default Rate} $\mathrm{WCDR} =\N \left( \frac{\N^{-1} (\PD) + \sqrt{\rho} \N^{-1} (0.999) }{\sqrt{1-\rho}} \right) $\\
+
+\textbf{Dependence of $\mathbf{\rho} $ on PD} $\rho = 0.12 \frac{1 - e^{-50\PD}}{1-e^{-50}} + 0.24\left(1- \frac{1 - e^{-50\PD}}{1-e^{-50}} \right) \approx 0.12(1+ e^{-50\PD}) $\\
+
+\textbf{Credit Risk Capital Requirements} $\mathcal{K}_{\mathrm{CR}} = \EAD \cdot\LGD \cdot(\mathrm{WCDR} -\PD ) \cdot \mathrm{MA} =0.08 \cdot \mathrm{RWA}  $, where $\EAD \cdot\LGD \cdot(\mathrm{WCDR} -\PD ) = \mathrm{CVaR}$\\
+
+For Retail Exposures there is no maturity adjustment:$\mathcal{K}_{\mathrm{CR}} = \EAD \cdot\LGD \cdot(\mathrm{WCDR} -\PD )$\\
+
+\textbf{Double Default Risk} For guarantees and credit derivatives $K (0.15 + 160 \PD_g)$, $K$ is capital required without guarantee, $\PD_g$ is default probability of the guarantor\\
+
+\textbf{Basel II.5}$\mathcal{K}_{\mathrm{MR}} = \max \{\VaR_{t-1}, (3+\xi_1) \VaR_{\mathrm{avg}}  \} + \max \{\mathrm{sVaR}_{t-1}, (3+\xi_2) \mathrm{sVaR}_{\mathrm{avg}}  \}  $, $\mathrm{sVaR}$: stressed VaR\\
+
+\textbf{Basel III} 
+\underline{Capital Requirement} 1) Tier 1 equity capital $\geq 4.5\%$ of RWA; 2)  Tier 1 $\geq 6\%$ of RWA; 3) Tier 1 plus Tier 2 $\geq 8\%$ of RWA\\
+\underline{Capital Conservation Buffer} 1) Extra $2.5 \%$ of Tier 1 equity capital required in normal times to absorb losses in periods of stress; 2) If Tier 1 equity $+$ capital conservation buffer is less than $7\% (=4.5\%+2.5\%)$ dividends are restricted\\
+
+\underline{Countercyclical Buffer} 1) Extra equity capital to allow for cyclicality of bank earnings; 2) Can be as high as $2.5\%$ of RWA; 3) Dividends restricted when capital is below required level\\
+
+\underline{Leverage Ratio} $\frac{\text{Tier 1 Capital}}{\text{Total Exposure}} \geq 3\%$, Total exposure includes all items on balance sheet, derivatives exposures (calculated as in Basel I), securities financing exposures, and some off-balance sheet items\\
+
+\underline{Liquidity Coverage Ratio} $\frac{\text{High Quality Liquid Assets}}{\text{Net Cash Outflows for 30 day period}} \geq 100\%$  \\
+\underline{Net Stable Funding Ratio} $\frac{\text{Amount of Stable Funding}}{\text{ Required Amount of Stable Funding}}\geq 100\%$\\
+
+\underline{Credit Valuation adjustment (CVA)} Adjustment to the value of transactions with a counterparty to allow for the possibility of a counterparty default.\\
+Default-free-Value of Transaction $-$ CVA $=$ Value of Transaction with possibility for counterparty default\\
+
+\underline{Under Standardised Approach} $\EAD  = 1.4 (\mathrm{RC} + \mathrm{PFE} )$, $\mathrm{RC}$ is replacement cost,  $\mathrm{PFE}$ is potential future exposure\\
+
+When no collateral is posted $\mathrm{RC} =\max \{V, 0 \} $ where $V$ is the value to the bank; Else $\mathrm{RC} =\max \{V-C, D, 0 \} $ where $C$ is current collateral and $D$ is amount that $V$ can increase without further collateral being transferred\\
+
+\textbf{Fundamental Review of Trading Book (FRTB)} Makes the distinction between trading book and banking book clearer\\
+
+From Jan. 2027, $\mathcal{K}_{\mathrm{MR}} = \max \{\mathcal{K}^{\mathrm{IMA}}_{\mathrm{MR}}, 72.5\% \mathcal{K}^{\mathrm{SA-TB}}_{\mathrm{MR}}  \} $\\
+
+\textbf{SA-TB Approach} $\mathcal{K}_{\mathrm{MR}} = \mathcal{K}^{\mathrm{Delta}} + \mathcal{K}^{\mathrm{Vega}} + \mathcal{K}^{\mathrm{Curvature}} + \mathcal{K}^{\mathrm{Default}} + \mathcal{K}^{\mathrm{Residual}} $, \\
+where $\mathcal{K}^{\mathrm{Delta}} + \mathcal{K}^{\mathrm{Vega}} = \sqrt{\sum^n_{i, j=1} \delta_i \delta_j \rho_{ij} W_i W_j }  $\\
+$\delta_{i, j} = \boldsymbol{\Delta}_i (\mathcal{F}_j) \cdot \mathcal{F}_j$, $\boldsymbol{\Delta}_i (\mathcal{F}_j)$ measures the (discrete) delta of the instrument $i$ by shocking the equity risk factor $\mathcal{F}_j$ by $1\%$: 
+$\delta_{i, j} = \frac{P_i (1.01\cdot \mathcal{F}_j ) - P_i (\mathcal{F}_j) }{1.01\mathcal{F}_j - \mathcal{F}_j}\mathcal{F}_j = \frac{P_i (1.01\cdot \mathcal{F}_j ) - P_i (\mathcal{F}_j) }{0.01} $, $P (\cdot)$ denotes the price of instrument $i$ in dependence of the risk factor$\qquad$ Aggregate $\delta_j = \sum_i \delta_{i,j}$\\
+
+\underline{Incremental Curvature Effect} $\mathrm{CVR} =\max \{W_i \delta_i - \text{impact of an increase of }W_i, - W_i \delta_i - \text{impact of a decrease of }W_i \} $,\\
+Positive curvature effects are counted as zero: $\max \{\mathrm{CVR}, 0 \}$
+\\
+\textbf{Internal Models Approach} Calculation based on overlapping $10$-day period
+\begin{flalign*}
+    &\ES (20\text{ days}) = c_{\ES} \sqrt{\var (\log (S_{20} / S_0))} = c_{\ES} \sqrt{\var (\log (S_{20} / S_{10})) + \var (\log (S_{10} / S_{0})) }&\\
+    &= \sqrt{c_{\ES}^2\var (\log (S_{20} / S_{10})) + c_{\ES}^2\var (\log (S_{10} / S_{0})) } = \sqrt{\ES (\text{first }20\text{ days})^2 + \ES (\text{second }20\text{ days})^2}&
+\end{flalign*}
+$\ES^{\mathrm{IMA}} =\sqrt{\ES^2_1 + \sum^5_{j=1} \left( \ES_j \sqrt{\frac{h_j - h_{j-1}}{10}} \right)^2 } $, where $\ES_1$ reflects changes in all variables over $10$ days; $\ES_2 \sqrt{\frac{h_2 - h_1}{10}}$ reflects changes in all variables time horizon greater than $10$ days over an additional $10$ days; $\ES_3 \sqrt{\frac{h_3 - h_2}{10}}$ reflects changes in all variables time horizon greater than $20$ days over an additional $20$ days\\
+
+$\ES_k = \ES^{\text{(reduced, stress)}}_k \max \left\{\frac{\ES^{\text{(full, current)}}_k}{\ES^{\text{(reduced, current)}}_k}, 1 \right\}$, $\ES^{\text{(full, current)}}_k$ is the expected shortfall based on the current period with the full set of risk factors; $\ES^{\text{(reduced, current)}}_k$ is the expected shortfall based on the current period with a restricted set of risk factors; $\ES^{\text{(reduced, stress)}}_k$ is the expected shortfall based on the stress period with the restricted set of risk factors\\
+
+\underline{Internally Modelled Capital Charge (IMCC)} $\rho\cdot \mathrm{IMCC}_{\mathrm{global}} + (1-\rho) \sum^5_{k=1} \mathrm{IMCC}_k $ \\
+$\rho=50\%$; $\mathrm{IMCC}_{\mathrm{global}} = \ES (L_1+\cdots + L_5)$ is stressed ES calculated with internal model of the total portfolio; $ \mathrm{IMCC}_k = \ES (L_k) \hat{=} \text{partial }\ES $ is stressed ES calculated at the risk class level (interest rate, equity, foreign exchange, commodity and credit spread).\\
+Concerning non-modellable risk factors (e.g. not enough historic observations), the capital requirement is based on stress scenarios, that are equivalent to a \underline{stressed expected shortfall SES}\\
+\underline{DRC} calculated using VaR model with $99.9\%$ CI with the same PD for IRB approach, 1 year horizon
+
+$\mathcal{K}^{\mathrm{IMA}}_{\mathrm{MR}} = \max \left\{\mathrm{IMCC}_{t-1} + \mathrm{SES_{t-1}}, \frac{m_c\sum^{60}_{i=1} \mathrm{IMCC}_{t-i} + \sum^{60}_{i=1} \mathrm{SES}_{t-i}  }{60} \right\} + \mathrm{DRC} $, $m_c = 1.5 + \xi, \xi \in [0, 0.5]$
+
+
+
+
+
+\end{multicols*}
+\end{document}
